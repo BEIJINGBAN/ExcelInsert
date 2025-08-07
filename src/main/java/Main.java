@@ -1,5 +1,6 @@
 import Data.Data;
 import Util.ExcelUtil;
+import Util.ZipUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,15 +9,21 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-
+        //Excel类的创建
+        ExcelUtil excel = new ExcelUtil();
+        //压缩类创建
+        ZipUtil zip = new ZipUtil();
         //一个Excel包含的文件数量
         int partitionSzie = 1;
         //生成的Excel文件的路径
-        List<String> excelPashs = new ArrayList<>();
+        String excelPash = "";
+        //压缩文件地址
+        String zipPash = "./src/";
+        //解压密码
+        String passWord = "123456";
         //日期格式
         SimpleDateFormat sdt = new SimpleDateFormat("yyyyMMdd");
-        //Excel类的创建
-        ExcelUtil excel = new ExcelUtil();
+
 
         //命名数据
         String fileType = "Tran";//文件类型 Tran\Alloc\BankFlow\TranAuditResult
@@ -104,15 +111,13 @@ public class Main {
         info.add(test3);
 
         //生成Excel，并给出返回地址
-        excelPashs = excel.easyExcel(ExcelPath,fileType,entCode,tranTime,tranType,opCode,info,partitionSzie);
+        excelPash = excel.easyExcel(ExcelPath,fileType,entCode,tranTime,tranType,opCode,info,partitionSzie);
 
-        //压缩文件
-
-        //加密
+        //压缩并加密
+        zipPash = zip.zipEncrypt(excelPash,zipPash,passWord,fileType,entCode,tranTime,tranType,opCode);
 
         //上传文件（SFTP/FTP）
 
-        //
 
     }
 }

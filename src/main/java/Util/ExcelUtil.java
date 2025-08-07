@@ -18,7 +18,7 @@ public class ExcelUtil {
 
 
     //创建Excel
-    public static void createExcel(String filePath, List<Data> info) {
+    public static String createExcel(String filePath, List<Data> info) {
         //总金额
         int nums = info.stream()
                 .mapToInt(data-> Integer.parseInt(data.getAmount()))
@@ -163,20 +163,26 @@ public class ExcelUtil {
             }
 
             row.createCell(19).setCellValue(infoData.getExtendInfo());
-
+            row.createCell(20).setCellValue(infoData.getRecordId());
         }
+        //隐藏一ID列
+        sheet2.setColumnHidden(20,true);
         //给定Excel路径
         File file = new File(filePath);
+        File parentFile = file.getParentFile();
+        String thisFilePath = parentFile.getAbsolutePath();
         try {
             file.createNewFile();//创建
             FileOutputStream fox = FileUtils.openOutputStream(file);//打开输入模式
             workbook.write(fox);//将workbook写入
-            fox.close();//关闭保存
+            fox.close();//保存并关闭
             System.out.println("成功创建了Excel");
             System.out.println("Excel文件的地址为: "+file.getCanonicalFile());
+            return thisFilePath;
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return "";
     }
 
     //分割Excel
@@ -213,18 +219,22 @@ public class ExcelUtil {
     }
 
     //分割后创建Excel
-    public List<String> easyExcel(String filePath, String fileType, String entCode, String tranTime, String tranType, String opCode, List<Data> info, int maxSize){
+    public String easyExcel(String filePath, String fileType, String entCode, String tranTime, String tranType, String opCode, List<Data> info, int maxSize){
         LinkedHashMap<String ,List<Data>> InfoMap = PartitionExcel(info,maxSize);
         if(InfoMap == null){
             return null;
         }
-        List<String> excelPashs = new ArrayList<>();
+        Set<String> allFilePath = new HashSet<>();
         for (Map.Entry<String,List<Data>> entry : InfoMap.entrySet()) {
             String ExcelPath = filePath + fileType+"_"+entCode+"_"+tranTime+"_"+tranType+"_"+opCode+"_"+entry.getKey();
-            createExcel(ExcelPath,entry.getValue());
-            excelPashs.add(ExcelPath);
+            allFilePath.add(createExcel(ExcelPath,entry.getValue()));
         }
-        return excelPashs;
+        File file = new File(filePath);
+        try {
+            return file.getCanonicalFile().toString();
+        } catch (Exception e) {
+            return file.getAbsolutePath();
+        }
     }
 
     public static void createExcel2(String filePath, List<Data> info) {
