@@ -1,5 +1,6 @@
 import Data.Data;
 import Util.ExcelUtil;
+import Util.ZipUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,11 +9,23 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-
-        SimpleDateFormat sdt = new SimpleDateFormat("yyyyMMdd");
-        //Excel的创建
+        //Excel类的创建
         ExcelUtil excel = new ExcelUtil();
+        //压缩类创建
+        ZipUtil zip = new ZipUtil();
+        //一个Excel包含的文件数量
+        int partitionSzie = 1;
+        //生成的Excel文件的路径
+        String excelPash = "";
+        //压缩文件地址
+        String zipPash = "./src/";
+        //解压密码
+        String passWord = "123456";
+        //日期格式
+        SimpleDateFormat sdt = new SimpleDateFormat("yyyyMMdd");
 
+
+        //命名数据
         String fileType = "Tran";//文件类型 Tran\Alloc\BankFlow\TranAuditResult
         String entCode = "001"; //企业编号
         String tranTime = sdt.format(new Date());//当前时间
@@ -20,11 +33,11 @@ public class Main {
         String opCode = "ADD";//操作码 ADD UPDATE DEL NOTICE
         String fileNo = "0001";//文件序号
         String ExcelPath = "./src/main/resources/";//生成的文件的路径
-        String ExcelName = fileType+"_"+entCode+"_"+tranTime+"_"+tranType+"_"+opCode+"_"+fileNo;
-        ExcelPath = ExcelPath + ExcelName +".xlsx";
 
+        //生成的Excel
         List<Data> info = new ArrayList<Data>();
 
+        //测试数据
         Data test1 = new Data();
         Data test2 = new Data();
         Data test3 = new Data();
@@ -97,20 +110,14 @@ public class Main {
         info.add(test2);
         info.add(test3);
 
-//        for( int i = 0; i < 100 ; i++){
-//            info.add(new Data());
-//        }
+        //生成Excel，并给出返回地址
+        excelPash = excel.easyExcel(ExcelPath,fileType,entCode,tranTime,tranType,opCode,info,partitionSzie);
 
-        //生成对应Excel
-        excel.createExcel(ExcelPath,info);
-        System.out.println("文件名字为:" + ExcelName);
-        //加密
-
-        //压缩文件
+        //压缩并加密
+        zipPash = zip.zipEncrypt(excelPash,zipPash,passWord,fileType,entCode,tranTime,tranType,opCode);
 
         //上传文件（SFTP/FTP）
 
-        //
 
     }
 }
