@@ -1,8 +1,16 @@
 package Util;
 
+import cn.hutool.core.text.StrPool;
+import cn.hutool.core.util.StrUtil;
 import com.jcraft.jsch.*;
 
+import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
+import java.util.Vector;
 import java.util.logging.Logger;
 
 public class SftpUtil {
@@ -45,21 +53,162 @@ protected final static int CLIENT_TIMEOUT = 1000 * 20;
                 }
             }
         }
-
     }
 
     //下载
+    public static void download(ChannelSftp sftp, String remoteFilePath,
+                                String remoteFileName, OutputStream outputStream) throws Exception {
+        if(sftp == null){
+            System.out.println("Sftp服务器连接失败");
+            return;
+        }
+       try {
+           sftp.cd(remoteFilePath);
+           sftp.get(remoteFileName, outputStream);
+       }catch(Exception e){
+           System.out.println("下载失败"+e);
+           throw new Exception("FTP服务器异常");
+       }
+    }
 
-    //连接
+    //文件上传
+    public static boolean upload(String host, int port, String username,
+                              String password, String basePath,
+                              String sftpFileName, InputStream input)throws Exception{
+        System.out.println("Sftp开始上传");
+        boolean success = true;
+        ChannelSftp sftp = login(host, port, username, password);
+        mkdir(sftp, basePath);
+        try{
+            sftp.put(input, sftpFileName);
+        }catch(SftpException e){
+            System.out.println("上传文件失败"+e);
+            success = false;
+        }finally {
+            logout(sftp);
+        }
+        System.out.println("文件上传完成");
+        return success;
+    }
 
-
-    //数据上传作为文件
 
     //删除文件
+    public static boolean delete(String host, int port, String username,
+                                 String password, String filePath) throws Exception{
+        boolean success = true;
+        ChannelSftp sftp = null;
+        try{
+            sftp = login(host, port, username, password);
+            String directory = filePath.substring(0,filePath.lastIndexOf(File.separator));
+            sftp.cd(directory);
+            String fileName = filePath.substring(filePath.lastIndexOf(File.separator)+1);
+            sftp.rm(fileName);
+        }catch (Exception e){
+            System.out.println("删除失败 "+e);
+            success = false;
+        }finally {
+            logout(sftp);
+        }
+        return success;
+    }
 
     //查询目录文件
+    public static boolean isFileExist(String host, int port, String username, String password, String remotePath){
+        boolean success = true;
+        ChannelSftp sftp = null;
+        try{
+            sftp = login(host, port, username, password);
+            sftp.cd(remotePath);
+            String directory = remotePath.substring(0,remotePath.lastIndexOf(File.separator));
+            String fileName = remotePath.substring(remotePath.lastIndexOf(File.separator)+1);
+            Vector<?> vector = sftp.ls(directory);
+            for (Object object : vector) {
+                ChannelSftp.LsEntry lsEntry = (ChannelSftp.LsEntry) object;
+                if (fileName.equals(lsEntry.getFilename())) {
+                    success = true;
+                    break;
+                }
+            }
+        }catch(Exception e){
+            System.out.println("查询失败"+e);
+            success = false;
+        }finally {
+            logout(sftp);
+        }
+        return success;
+    }
+
 
     //列出目录文件
+    public static List<String> fileList(String host, int port, String username, String password, String remotePath){
+        List<String> filelist = new ArrayList<String>();
+        ChannelSftp sftp = null;
+        try{
+            sftp = login(host, port, username, password);
+            Vector<?> files = sftp.ls(remotePath);
+            for (Object object : files) {
+                ChannelSftp.LsEntry lsEntry = (ChannelSftp.LsEntry) object;
+                filelist.add(lsEntry.getFilename());
+            }
+        }catch (Exception e){
+            System.out.println("查询失败"+e);
+        }finally {
+            logout(sftp);
+        }
+        return filelist;
+    }
+
+    //重命名
+    public static boolean rename(String host, int port, String username, String password, String remotePath,String newFileName){
+        boolean success = true;
+        ChannelSftp sftp = null;
+        try {
+            sftp = login(host, port, username, password);
+            String directory = remotePath.substring(0,remotePath.lastIndexOf(File.separator));
+            String oldFileName = remotePath.substring(remotePath.lastIndexOf(File.separator)+1);
+            mkdir(sftp, directory);
+            sftp.cd(directory);
+            sftp.rename(oldFileName, newFileName);
+        }catch (Exception e){
+            System.out.println("重命名失败 "+ e);
+            success = false;
+        } finally {
+            logout(sftp);
+        }
+        return success;
+    }
 
     //递归创建文件夹
+    public static void mkdir(ChannelSftp sftp,String basePath)throws Exception {
+        try {
+            sftp.cd(basePath);
+        } catch (SftpException e) {
+            List<String> dirs = StrUtil.split(basePath, "/");
+            String tempPath = "";
+            for (String dir : dirs) {
+                if (StrUtil.isBlank(dir)) {
+                    continue;
+                }
+                tempPath += StrPool.SLASH + dir;
+                try {
+                    sftp.cd(tempPath);
+                } catch (SftpException e1) {
+                    try {
+                        sftp.mkdir(tempPath);
+                        sftp.cd(tempPath);
+                    } catch (SftpException e2) {
+                        System.out.println("创建文件夹失败");
+                        throw new Exception(e2);
+                    }
+                }
+                try {
+                    sftp.cd(tempPath);
+                } catch (SftpException e1) {
+                    System.out.println("服务器异常 " + e1);
+                    throw new Exception(e1);
+                }
+            }
+        }
+    }
+
 }

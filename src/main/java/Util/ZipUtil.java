@@ -12,12 +12,15 @@ import net.lingala.zip4j.model.enums.EncryptionMethod;
 
 import java.io.File;
 import java.util.List;
+import java.util.UUID;
 
 public class ZipUtil {
     //压缩后加密
-    public static String zipEncrypt(String filePath, String savePath ,String passWord,String fileType, String entCode, String tranTime, String tranType, String opCode){
+    public static String zipEncrypt(String filePath, String savePath ,String passWord,String fileType, String entCode,String businessTag ,String tranTime){
         try{
-            savePath = savePath + fileType+"_"+entCode+"_"+tranTime+"_"+tranType+"_"+opCode+".zip";
+            String soleId = UUID.randomUUID().toString();
+            //Tran_企业编号_业务系统标识_交易日期_唯一编号.zip
+            savePath = savePath + fileType+"_"+entCode+"_"+businessTag+"_"+tranTime+"_"+soleId+".zip";
             List<File> files = FileUtil.loopFiles(filePath);
             FileUtil.touch(savePath);
             try(ZipFile zipFile = new ZipFile(savePath)){
