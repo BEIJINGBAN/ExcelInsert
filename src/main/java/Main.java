@@ -26,6 +26,7 @@ public class Main {
         //文件地址
         String zipPath = "./src/";
         String ExcelPath = "./src/main/resources/";
+
         //解压密码
         String passWord = "123456";
         //日期格式
@@ -40,7 +41,9 @@ public class Main {
         String opCode = "ADD";//操作码 ADD UPDATE DEL NOTICE
         String businessTag = "CRM";//业务类型
 
-
+        //应收上传
+        String excelName = fileType+"_"+entCode+"_"+tranTime+"_"+tranType+"_"+opCode;
+        String zipName = fileType+entCode+businessTag+tranTime;
         //生成的Excel
         List<Data> info = new ArrayList<Data>();
 
@@ -118,16 +121,16 @@ public class Main {
         info.add(test3);
 
         //生成Excel，并给出返回地址  Tran_QT330001_20231025_微信_ADD_001.xlsx
-        excelPash = excel.easyExcel(ExcelPath,fileType,entCode,tranTime,tranType,opCode,info,partitionSzie);
+        excelPash = excel.easyExcel(ExcelPath,excelName,info,partitionSzie);
 
         //压缩并加密               Tran_企业编号_业务系统标识_交易日期_唯一编号.zip
-        zipPath = zip.zipEncrypt(excelPash,zipPath,passWord,fileType,entCode,businessTag,tranTime);
+        zipPath = zip.zipEncrypt(excelPash,zipPath,passWord,zipName);
 
         //上传文件（SFTP/FTP）
         try (FileInputStream input = new FileInputStream(new File(zipPath))){
 
             String fileName = zipPath.substring(zipPath.lastIndexOf(File.separator)+1);
-            sftp.upload("122.224.83.69", 10022, "zyy-sftp", "zyy-sftp/DFeVQf3#6vu8", "/zyy/jh/upload", fileName, input);
+            sftp.upload("122.224.83.69", 10022, "zyy-sftp", "DFeVQf3#6vu8", "/zyy/jh/upload", fileName, input);
         } catch (FileNotFoundException e) {
             throw new RuntimeException("压缩文件找不到 "+zipPath,e);
         } catch (IOException e) {
