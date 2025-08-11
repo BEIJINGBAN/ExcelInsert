@@ -3,6 +3,7 @@ import Util.ExcelUtil;
 import Util.SftpUtil;
 import Util.ZipUtil;
 
+import javax.print.DocFlavor;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -26,7 +27,9 @@ public class Main {
         //文件地址
         String zipPath = "./src/";
         String ExcelPath = "./src/main/resources/";
-
+        String BASE_PATH = "./src/main/resources/";
+        String API_PATH = BASE_PATH + "api";
+        
         //解压密码
         String passWord = "123456";
         //日期格式

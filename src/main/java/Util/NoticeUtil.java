@@ -6,7 +6,7 @@ import okhttp3.*;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-public class noticeUtil {
+public class NoticeUtil {
 
     private static final OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
