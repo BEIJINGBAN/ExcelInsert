@@ -16,12 +16,12 @@ public class NoticeUtil {
 
     private static final com.fasterxml.jackson.databind.ObjectMapper mapper = new ObjectMapper();
     //Json格式
-    private static class RequestBodyJson{
-        String interfaceVersion;
-        String transSeqNo;
-        String type;
-        String filePath;
-        String fileName;
+    public static class RequestBodyJson{
+        public String interfaceVersion;
+        public String transSeqNo;
+        public String type;
+        public String filePath;
+        public String fileName;
     }
 
     public static boolean noticeAudit(String BASE_URL,String API_PATH,
@@ -34,13 +34,13 @@ public class NoticeUtil {
         requestBodyJson.type = type;
         requestBodyJson.filePath = filePath;
         requestBodyJson.fileName = fileName;
-        requestBodyJson.filePath = filePath;
 
         //构造Json
         String json ="";
         try{
             json = mapper.writeValueAsString(requestBodyJson);
             System.out.println("请求Json如下"+json);
+            result = true;
         }catch (Exception e){
             System.err.println("JSON序列化失败"+e.getMessage());
             result = false;

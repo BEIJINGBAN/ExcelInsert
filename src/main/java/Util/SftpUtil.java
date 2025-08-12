@@ -28,6 +28,7 @@ protected final static int CLIENT_TIMEOUT = 1000 * 20;
             Properties config = new Properties();
             config.put("StrictHostKeyChecking", "no");
             session.setConfig(config);
+            session.connect();
             Channel channel = session.openChannel("sftp");
             channel.connect();
             ChannelSftp sftp = (ChannelSftp) channel;
