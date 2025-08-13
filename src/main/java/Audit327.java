@@ -35,9 +35,16 @@ public class Audit327 {
         String type = "1";
 
         //SFTP信息
-        String SFTP_HOST = "10.60.45.65";
-        int SFTP_PORT = 22;
-        String SFTP_USER = "forftp";
+        String FTP_HOST = "10.60.45.65";
+        int FTP_PORT = 22;
+        String FTP_USER = "forftp";
+        String FTP_PASS = "123456";
+        String FTP_PATH = "/zyy/audit327/upload";
+
+        //SFTP信息
+        String SFTP_HOST = "127.0.0.1";
+        int SFTP_PORT = 28;
+        String SFTP_USER = "forSftp";
         String SFTP_PASS = "123456";
         String SFTP_PATH = "/zyy/audit327/upload";
 
@@ -280,26 +287,28 @@ public class Audit327 {
         String ExcelsPath = excels.getAbsolutePath();
 //       压缩并加密               Tran_企业编号_业务系统标识_交易日期_唯一编号.zip
         zipPath = zip.zipEncrypt(ExcelsPath, zipPath, passWord, zipName);
-        // 上传文件（FTP）
-        try (FileInputStream input = new FileInputStream(new File(zipPath))) {
 
-            String fileName = zipPath.substring(zipPath.lastIndexOf('/') + 1);
-            FtpUtil.upload(SFTP_HOST, SFTP_PORT, SFTP_USER, SFTP_PASS, SFTP_PATH, fileName, input);
-            // 成功上传后-通知模块
-            notice.noticeAudit(BASE_PATH, API_PATH, interfaceVersion, transSeqNo, type, SFTP_PATH, zipName);
-
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException("压缩文件找不到 " + zipPath, e);
-        } catch (IOException e) {
-            throw new RuntimeException("读取出问题 " + e.getMessage(), e);
-        } catch (Exception e) {
-            throw new RuntimeException("FTP出问题 " + e.getMessage(), e);
-        }
-//        //上传文件（SFTP）
+//        // 上传文件（FTP）
+//        try (FileInputStream input = new FileInputStream(new File(zipPath))) {
+//
+//            String fileName = zipPath.substring(zipPath.lastIndexOf('/') + 1);
+//            FtpUtil.upload(SFTP_HOST, SFTP_PORT, SFTP_USER, SFTP_PASS, SFTP_PATH, fileName, input);
+//            // 成功上传后-通知模块
+//            notice.noticeAudit(BASE_PATH, API_PATH, interfaceVersion, transSeqNo, type, SFTP_PATH, zipName);
+//
+//        } catch (FileNotFoundException e) {
+//            throw new RuntimeException("压缩文件找不到 " + zipPath, e);
+//        } catch (IOException e) {
+//            throw new RuntimeException("读取出问题 " + e.getMessage(), e);
+//        } catch (Exception e) {
+//            throw new RuntimeException("FTP出问题 " + e.getMessage(), e);
+//        }
+        //上传文件（SFTP）
+//
 //        try (
 //                FileInputStream input = new FileInputStream(new File(zipPath))){
 //
-//            String fileName = zipPath.substring(zipPath.lastIndexOf(File.separator)+1);
+//            String fileName = zipPath.substring(zipPath.lastIndexOf('/') + 1);
 //            sftp.upload(SFTP_HOST, SFTP_PORT, SFTP_USER, SFTP_PASS, SFTP_PATH, fileName, input);
 //            //成功上传后-通知模块
 //            notice.noticeAudit(BASE_PATH,API_PATH,interfaceVersion,transSeqNo,type,SFTP_PATH,zipName);
@@ -312,5 +321,6 @@ public class Audit327 {
 //        } catch (Exception e) {
 //            throw new RuntimeException("SFTP出问题 "+e.getMessage());
 //        }
+        notice.noticeAudit(BASE_PATH,API_PATH,interfaceVersion,transSeqNo,type,SFTP_PATH,zipName);
 }
 }

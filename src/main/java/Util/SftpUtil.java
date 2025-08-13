@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class SftpUtil {
 
 //    private final static Logger  logger = Logger.getLogger(SftpUtil.class);
-protected final static int CLIENT_TIMEOUT = 1000 * 20;
+    protected final static int CLIENT_TIMEOUT = 1000 * 20;
     // 登录
     public static ChannelSftp login(String host, int port,String username, String password ) throws Exception {
         Session session;
@@ -211,5 +211,4 @@ protected final static int CLIENT_TIMEOUT = 1000 * 20;
             }
         }
     }
-
 }
