@@ -1,6 +1,9 @@
 package Util;
 
+import cn.hutool.crypto.digest.DigestUtil;
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -8,15 +11,22 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.security.DigestOutputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 
 public class ExcelUtil {
 
+    private static final Logger log = LogManager.getLogger(ExcelUtil.class);
+
     //分割Excel
     public <T> LinkedHashMap PartitionExcel(List<T> info, int maxSize){
         if (info == null || info.size() == 0) {
-            System.out.println("没有数据需要分割");
+            log.error("没有数据需要分割");
+//            System.out.println("没有数据需要分割");
             return null;
         }
 
@@ -109,9 +119,47 @@ public class ExcelUtil {
                 try (FileOutputStream fos = FileUtils.openOutputStream(file)) {
                     workbook.write(fos);
                 }
-                System.out.println("成功生成EXCEL,地址为 "+file.getCanonicalFile());
+                log.info("成功生成EXCEL,地址为 "+file.getCanonicalFile());
+//                System.out.println("成功生成EXCEL,地址为 "+file.getCanonicalFile());
             }finally {
                 workbook.close();
+            }
+        }
+        public String calcultateContentHash() throws IOException, NoSuchAlgorithmException {
+
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            try(OutputStream outputStream = new DigestOutputStream(new OutputStream() {
+                @Override
+                public void write(int b) throws IOException {
+                }
+                @Override
+                public void write(byte[] b,int off,int len) throws IOException {}
+            },messageDigest)){
+
+                final byte[] delimiter = "|".getBytes();
+
+                for (SheetConfig sheet : sheets){
+                    outputStream.write(sheet.sheetName.getBytes());
+                    outputStream.write(delimiter);
+
+                    for (String[] header : sheet.headerRows){
+                        for (String cellValue : header){
+                            outputStream.write(cellValue.getBytes());
+                            outputStream.write(delimiter);
+                        }
+
+                    }
+                    for (String[] rowData : sheet.data){
+                        for (String cellValue : rowData){
+                            if (cellValue != null) {
+                                outputStream.write(cellValue.getBytes());
+                                outputStream.write(delimiter);
+                            }
+                        }
+                    }
+                }
+                byte[] hashBytes = messageDigest.digest();
+                return DigestUtil.sha256Hex(hashBytes);
             }
         }
     }

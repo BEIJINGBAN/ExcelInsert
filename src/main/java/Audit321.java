@@ -5,12 +5,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Audit321 {
-public static void Audit321() throws IOException {
+public static void Audit321() throws IOException, NoSuchAlgorithmException {
 
             //日期格式
             SimpleDateFormat sdt = new SimpleDateFormat("yyyyMMdd");
@@ -19,6 +20,8 @@ public static void Audit321() throws IOException {
 
             //压缩密码
             String passWord = "123456";
+
+            String soleID = "";
 
             //命名数据
             String fileType = "Tran";//文件类型 Tran\Alloc\BankFlow\TranAuditResult
@@ -70,7 +73,7 @@ public static void Audit321() throws IOException {
             test1.setChannelSerialNo("WX202504050001");
             test1.setIncomeExpenseFlag("2"); // 收入
             test1.setAmount("100"); // 100分 = 1元
-            test1.setTradeTime(new Date());
+            test1.setTradeTime(java.sql.Date.valueOf("2025-04-01"));
             test1.setOriginalTradeTime(null); // 可选，非现金上缴可为空
             test1.setEnterpriseCashieType("WECHAT_SCAN");
             test1.setRemark("门店扫码支付");
@@ -80,7 +83,7 @@ public static void Audit321() throws IOException {
             test1.setPurpose("日常收款");
             test1.setAuditNotifyUrl("https://api.company.com/notify");
             test1.setDeliveryOrderFlag("1"); // 是发货订单
-            test1.setConfirmReceiveTime(new Date()); // 假设已收货
+            test1.setConfirmReceiveTime(java.sql.Date.valueOf("2025-04-01")); // 假设已收货
             test1.setExtendInfo("{\"extend1\":\"手机\",\"extend2\":\"1\",\"extend3\":\"0.5\",\"extend5\":\"李四\"}");
 
             test2.setOrderOrgCode("ORG002");
@@ -91,7 +94,7 @@ public static void Audit321() throws IOException {
             test2.setChannelSerialNo("ALI202504050002");
             test2.setIncomeExpenseFlag("2"); // 收入
             test2.setAmount("111100"); // 111100分 = 1111.00元
-            test2.setTradeTime(new Date());
+            test2.setTradeTime(java.sql.Date.valueOf("2025-04-01"));
             test2.setOriginalTradeTime(null);
             test2.setEnterpriseCashieType("ALIPAY_SCAN");
             test2.setRemark("支付宝门店收款");
@@ -112,7 +115,7 @@ public static void Audit321() throws IOException {
             test3.setChannelSerialNo("BANK20250405");
             test3.setIncomeExpenseFlag("1"); // 支出（退款）
             test3.setAmount("5000"); // 5000分 = 50元
-            test3.setTradeTime(new Date());
+            test3.setTradeTime(java.sql.Date.valueOf("2025-04-01"));
             test3.setOriginalTradeTime(java.sql.Date.valueOf("2025-04-01")); // 原交易日期
             test3.setEnterpriseCashieType("BANK_TRANSFER");
             test3.setRemark("客户退货退款");
@@ -142,7 +145,7 @@ public static void Audit321() throws IOException {
                         .mapToInt(d -> Integer.parseInt(d.getAmount()))
                         .sum();
 
-                ExcelUtil.ExcelGenerator.create()
+                ExcelUtil.ExcelGenerator excelGenerator = ExcelUtil.ExcelGenerator.create()
                         //表一
                         .sheet("总览表", new String[]{"总笔数", "总金额"},
                                 Arrays.<String[]>asList(
@@ -194,30 +197,37 @@ public static void Audit321() throws IOException {
                                                 d.getExtendInfo(),
                                                 d.getRecordId()})
                                         .collect(Collectors.toList())
-                        )
-                        .save(filePath);
+                        );
+                try {
+                    soleID = excelGenerator.calcultateContentHash();
+                    excelGenerator.save(filePath);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (NoSuchAlgorithmException e) {
+                    throw new RuntimeException(e);
+                }
             }
             //取绝对路径
             File excels = new File(ExcelPath);
             String ExcelsPath = excels.getAbsolutePath();
 //       压缩并加密               Tran_企业编号_业务系统标识_交易日期_唯一编号.zip
-            zipPath = zip.zipEncrypt(ExcelsPath, zipPath, passWord, zipName);
+            zipPath = zip.zipEncrypt(ExcelsPath, zipPath, passWord, zipName,soleID);
 
-    // 上传文件（FTP）
-    try (FileInputStream input = new FileInputStream(new File(zipPath))) {
-
-        String fileName = zipPath.substring(zipPath.lastIndexOf('/') + 1);
-        FtpUtil.upload(SFTP_HOST, SFTP_PORT, SFTP_USER, SFTP_PASS, SFTP_PATH, fileName, input);
-        // 成功上传后-通知模块
-        notice.noticeAudit(BASE_PATH, API_PATH, interfaceVersion, transSeqNo, type, SFTP_PATH, zipName);
-
-    } catch (FileNotFoundException e) {
-        throw new RuntimeException("压缩文件找不到 " + zipPath, e);
-    } catch (IOException e) {
-        throw new RuntimeException("读取出问题 " + e.getMessage(), e);
-    } catch (Exception e) {
-        throw new RuntimeException("FTP出问题 " + e.getMessage(), e);
-    }
+//    // 上传文件（FTP）
+//    try (FileInputStream input = new FileInputStream(new File(zipPath))) {
+//
+//        String fileName = zipPath.substring(zipPath.lastIndexOf('/') + 1);
+//        FtpUtil.upload(SFTP_HOST, SFTP_PORT, SFTP_USER, SFTP_PASS, SFTP_PATH, fileName, input);
+//        // 成功上传后-通知模块
+//        notice.noticeAudit(BASE_PATH, API_PATH, interfaceVersion, transSeqNo, type, SFTP_PATH, zipName);
+//
+//    } catch (FileNotFoundException e) {
+//        throw new RuntimeException("压缩文件找不到 " + zipPath, e);
+//    } catch (IOException e) {
+//        throw new RuntimeException("读取出问题 " + e.getMessage(), e);
+//    } catch (Exception e) {
+//        throw new RuntimeException("FTP出问题 " + e.getMessage(), e);
+//    }
 
             //上传文件（SFTP/FTP）
 //            try (FileInputStream input = new FileInputStream(new File(zipPath))){

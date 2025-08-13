@@ -4,6 +4,7 @@ import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
+import org.apache.logging.log4j.LogManager;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -16,8 +17,9 @@ public class FtpUtil {
         protected static final int CONNECT_TIMEOUT = 20 * 1000;
         // 数据传输超时（60秒）
         protected static final int DATA_TIMEOUT = 60 * 1000;
+    private static final org.apache.logging.log4j.Logger log = LogManager.getLogger(FtpUtil.class);
 
-        /**
+    /**
          * 登录 FTP 服务器
          */
         public static FTPClient login(String host, int port, String username, String password) throws Exception {
@@ -36,12 +38,14 @@ public class FtpUtil {
                 int replyCode = ftpClient.getReplyCode();
                 if (!FTPReply.isPositiveCompletion(replyCode)) {
                     ftpClient.disconnect();
+                    log.error("FTP服务器连接失败，响应码: " + replyCode);
                     throw new Exception("FTP服务器连接失败，响应码: " + replyCode);
                 }
 
                 // 登录
                 boolean success = ftpClient.login(username, password);
                 if (!success) {
+                    log.error("FTP登录失败，用户名或密码错误");
                     throw new Exception("FTP登录失败，用户名或密码错误");
                 }
 
@@ -58,6 +62,7 @@ public class FtpUtil {
                         ftpClient.disconnect();
                     }
                 } catch (IOException ex) {
+                    log.error("关闭连接时发生异常: " + ex.getMessage());
                     System.out.println("关闭连接时发生异常: " + ex.getMessage());
                 }
                 throw new Exception("连接FTP服务器异常: " + e.getMessage(), e);
@@ -72,11 +77,13 @@ public class FtpUtil {
                 try {
                     ftpClient.logout();
                 } catch (IOException e) {
+                    log.error("FTP登出失败: " + e.getMessage());
                     System.out.println("FTP登出失败: " + e.getMessage());
                 }
                 try {
                     ftpClient.disconnect();
                 } catch (IOException e) {
+                    log.error("关闭FTP连接失败: " + e.getMessage());
                     System.out.println("关闭FTP连接失败: " + e.getMessage());
                 }
             }
@@ -87,6 +94,7 @@ public class FtpUtil {
          */
         public static boolean upload(String host, int port, String username, String password,
                                      String basePath, String ftpFileName, InputStream input) throws Exception {
+            log.info("FTP开始上传: " + ftpFileName);
             System.out.println("FTP开始上传: " + ftpFileName);
             boolean success = false;
             FTPClient ftpClient = null;
@@ -101,9 +109,11 @@ public class FtpUtil {
                 success = ftpClient.storeFile(ftpFileName, input);
                 if (!success) {
                     String replyString = ftpClient.getReplyString();
+                    log.error("FTP上传失败，响应信息: " + replyString);
                     throw new Exception("FTP上传失败，响应信息: " + replyString);
                 }
 
+                log.info("文件上传完成: " + ftpFileName);
                 System.out.println("文件上传完成: " + ftpFileName);
                 return true;
 
@@ -113,6 +123,7 @@ public class FtpUtil {
                     try {
                         input.close();
                     } catch (IOException e) {
+                        log.error("关闭输入流失败: " + e.getMessage());
                         System.out.println("关闭输入流失败: " + e.getMessage());
                     }
                 }
@@ -125,16 +136,20 @@ public class FtpUtil {
         public static void download(FTPClient ftpClient, String remoteFilePath,
                                     String remoteFileName, OutputStream outputStream) throws Exception {
             if (ftpClient == null || !ftpClient.isConnected()) {
+                log.error("FTP服务器未连接");
                 throw new Exception("FTP服务器未连接");
             }
             try {
                 String remotePath = remoteFilePath + "/" + remoteFileName;
                 boolean retrieved = ftpClient.retrieveFile(remotePath, outputStream);
                 if (!retrieved) {
+                    log.error("下载失败，文件可能不存在: " + remotePath);
                     throw new Exception("下载失败，文件可能不存在: " + remotePath);
                 }
             } catch (Exception e) {
-                System.out.println("下载失败: " + e.getMessage());
+                log.error("下载失败: " + e.getMessage());
+                log.error("FTP服务器异常: " + e.getMessage());
+//                System.out.println("下载失败: " + e.getMessage());
                 throw new Exception("FTP服务器异常: " + e.getMessage());
             }
         }
@@ -259,9 +274,11 @@ public class FtpUtil {
                 if (!ftpClient.changeWorkingDirectory(current.toString())) {
                     // 目录不存在，尝试创建
                     if (ftpClient.makeDirectory(current.toString())) {
-                        System.out.println("创建目录: " + current);
+                        log.info("创建目录: " + current);
+//                        System.out.println("创建目录: " + current);
                     } else {
-                        System.out.println("创建目录失败: " + current);
+                        log.error("创建目录失败: " + current);
+//                        System.out.println("创建目录失败: " + current);
                     }
                     ftpClient.changeWorkingDirectory(current.toString());
                 }

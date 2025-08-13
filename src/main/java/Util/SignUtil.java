@@ -17,41 +17,6 @@ import org.apache.commons.lang.StringUtils;
 
 public class SignUtil {
 
-
-
-////    // 1. 构造请求对象（如 mchId + bizContent）
-//// 2. 转成 JSON 字符串（noSign）
-//// 3. 解析成 JSONObject
-//// 4. 调用 genSignContentWithSalt 拼接待签名字符串
-//// 5. 调用 rsaSign 生成签名
-//// 6. 把签名放入 JSON 中
-//// 7. 发送 HTTP 请求
-//// 8. 接收响应后，提取 sign 字段
-//// 9. 重新拼接待验签字符串
-//// 10. 调用 rsaVerify 验证签名
-////    public static void main(String[] args) {
-/////		YqsReceiveEnterpriseBizContent bizContent = new YqsReceiveEnterpriseBizContent();
-////        EhtBaseRequest request = new EhtBaseRequest<>(mchId, bizContent);
-////        String noSign = JSON.toJSONString(request);
-////        JSONObject jsonObject = JSONObject.parseObject(noSign);
-////        String signContent = SignUtil.genSignContentWithSalt(jsonObject, this.saltKey);
-////        log.info("签名字符串：{}", signContent);
-////        String sign = SignUtil.rsaSign(signContent, this.priKey, "SHA256withRSA", "utf-8");
-////        jsonObject.put("sign", sign);
-////        String requestContent = jsonObject.toJSONString();
-////
-////        log.info("地址：{} 请求原文：{}", url, requestContent);
-////        String response = HttpUtils.doPost(url, "application/json", requestContent.getBytes(StandardCharsets.UTF_8), 5000, 15000, null, 0);
-////        log.info("响应原文：{}", response);
-////
-////        JSONObject respObj = JSON.parseObject(response);
-////        String signResult = respObj.getString("sign");
-////        String respSignContent = SignUtil.genSignContentWithSalt(respObj, this.saltKey);
-////        log.info("验签字符串：{}", signContent);
-////        SignUtil.rsaVerify(respSignContent, signResult, pubKey, "SHA256withRSA", "utf-8");
-////        log.info("验签成功");
-////    }
-
     //生成签名
     public static String genSignContentWithSalt(Map<String, Object> map, String saltVal) {
         List<String> contentHolder = new ArrayList<>();

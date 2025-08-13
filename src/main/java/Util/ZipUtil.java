@@ -2,23 +2,32 @@ package Util;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.crypto.digest.DigestUtil;
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.model.enums.AesKeyStrength;
 import net.lingala.zip4j.model.enums.CompressionLevel;
 import net.lingala.zip4j.model.enums.CompressionMethod;
 import net.lingala.zip4j.model.enums.EncryptionMethod;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ZipUtil {
+    private static final Logger log = LogManager.getLogger(ZipUtil.class);
+
     //压缩后加密
-    public static String zipEncrypt(String filePath, String savePath ,String passWord,String fileName){
+    public static String zipEncrypt(String filePath, String savePath ,String passWord,String fileName,String soleId){
         try{
-            String soleId = UUID.randomUUID().toString();
             //Tran_企业编号_业务系统标识_交易日期_唯一编号.zip
             savePath = savePath + fileName+"_"+soleId+".zip";
             List<File> files = FileUtil.loopFiles(filePath);
@@ -36,10 +45,10 @@ public class ZipUtil {
 
                 zipFile.addFiles(files,zipParameters);
             }
-            System.out.println("压缩成功，地址为: "+savePath);
+            log.info("压缩成功，地址为: "+savePath);
             return savePath;
         }catch (Exception e){
-            System.out.println("压缩出错，问题： "+e);
+            log.error("压缩出错，问题： "+e);
             return "";
         }
     }
