@@ -104,10 +104,11 @@ public class FtpUtil {
 
                 // 创建并切换到目标目录（递归）
                 mkdirs(ftpClient, basePath);
-                ftpClient.changeWorkingDirectory(basePath);
-
+//                ftpClient.changeWorkingDirectory(basePath);
+                String remotePath = basePath + "/" + ftpFileName;
                 // 执行上传
-                success = ftpClient.storeFile(ftpFileName, input);
+                success = ftpClient.storeFile(remotePath, input);
+                log.info(ftpClient.getReplyString());
                 if (!success) {
                     String replyString = ftpClient.getReplyString();
                     log.error("FTP上传失败，响应信息: " + replyString);

@@ -12,12 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
-import java.util.logging.Logger;
 
 public class SftpUtil {
 
 //    private final static Logger  logger = Logger.getLogger(SftpUtil.class);
-    protected final static int CLIENT_TIMEOUT = 1000 * 10;
+    protected final static int CLIENT_TIMEOUT = 1000 * 20;
     private static final org.apache.logging.log4j.Logger log = LogManager.getLogger(SftpUtil.class);
 
     // 登录

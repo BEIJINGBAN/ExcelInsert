@@ -24,7 +24,7 @@ public class NoticeUtil {
 
     //配置
     private static final String PRIVATE_KEY = Constants.PRIVATE_KEY;                                   //私钥
-    private static final String SALT_KEY = "test_api_secret_123456";          //盐值
+    private static final String SALT_KEY = "c9b576e12251f3a7f30c548672fcbd9a";          //盐值
     private static final String SIGN_ALGORITHM = "SHA256withRSA";             //签名算法
     private static final String CHARSET = "UTF-8";                            //字符集
 
@@ -61,22 +61,18 @@ public class NoticeUtil {
 
             String signContent = SignUtil.genSignContentWithSalt(paramMap, SALT_KEY);
             log.info("待签名字符串： " + signContent);
-            //            System.out.println("待签名字符串： " + signContent);
 
             String sign = SignUtil.rsaSign(signContent, PRIVATE_KEY, SIGN_ALGORITHM, CHARSET);
             if (sign == null || sign.trim().isEmpty()) {
                 log.info("签名失败，检查私钥格式");
-//                System.err.println("签名失败，检查私钥格式");
                 result = false;
             }
             log.info("签名" + sign);
-//            System.out.println("签名" + sign);
 
             paramMap.put("sign", sign);
 
             String json = mapper.writeValueAsString(paramMap);
             log.info("请求JSON为 ： " + json);
-//            System.out.println("请求JSON为 ： " + json);
 
             //构造请求
             Request request = new Request.Builder()
@@ -88,18 +84,15 @@ public class NoticeUtil {
                 if (response.isSuccessful()) {
                     String responseBody = response.body().string();
                     log.info("通知成功，响应： " + responseBody);
-//                    System.out.println("通知成功，响应： " + responseBody);
                     result = true;
                 } else {
                     String errorMsg = response.body() != null ? response.body().string() : "未知错误";
                     log.error("请求失败，状态码： " + response.code() + "；响应： " + errorMsg);
-//                    System.out.println("请求失败，状态码： " + response.code() + "；响应： " + errorMsg);
                     result = false;
                 }
             }
         }catch (IOException e) {
             log.error("请求异常" + e.getMessage());
-//            System.err.println("请求异常" + e.getMessage());
             e.printStackTrace();
             result = false;
         }

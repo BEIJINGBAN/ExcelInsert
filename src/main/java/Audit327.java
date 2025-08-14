@@ -1,3 +1,4 @@
+import Config.Constants;
 import Data.BillData;
 import Data.Data;
 import Util.*;
@@ -12,14 +13,15 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Audit327 {
-    public static void Audit327() throws FileNotFoundException, IOException, NoSuchAlgorithmException {
+    public static void Audit327(int excelSize) throws FileNotFoundException, IOException, NoSuchAlgorithmException {
+        //3.2.7对账单
         //日期格式
         SimpleDateFormat sdt = new SimpleDateFormat("yyyyMMdd");
         //一个Excel包含的文件数量
-        int partitionSzie = 2;
+        int partitionSzie = excelSize;
 
         //压缩密码
-        String passWord = "123456";
+        String passWord = Constants.ZIP_PASSWORD;
 
         //命名数据
         String billName = "收账单对账数据";//文件类型 Tran\Alloc\BankFlow\TranAuditResult
@@ -28,27 +30,29 @@ public class Audit327 {
         //文件地址
         String zipPath = "./src/";
         String ExcelPath = "./src/main/resources/";
-        String BASE_PATH = "http://localhost:8081";
-        String API_PATH = "/hello";
+
+        //通知
+        String BASE_PATH = "http://10.60.45.34:8204";
+        String API_PATH = "/yqs/openapi/v1/audit/notify/fileUploadNotify";
 
         //通知信息
         String interfaceVersion = "1.0";
         String transSeqNo = "NoABC";
         String type = "1";
 
-        //SFTP信息
-        String FTP_HOST = "10.60.45.65";
-        int FTP_PORT = 22;
-        String FTP_USER = "forftp";
-        String FTP_PASS = "123456";
-        String FTP_PATH = "/zyy/audit327/upload";
+        //FTP信息
+        String FTP_HOST = "172.18.13.96";
+        int FTP_PORT = 21;
+        String FTP_USER = "fingard1";
+        String FTP_PASS = "JyB9Wm4qNZ";
+        String FTP_PATH = "/data/ftp/data/ftp/zhenongfa/recontransdetail/upload/";
 
         //SFTP信息
-        String SFTP_HOST = "127.0.0.1";
-        int SFTP_PORT = 28;
-        String SFTP_USER = "forSftp";
-        String SFTP_PASS = "123456";
-        String SFTP_PATH = "/zyy/audit327/upload";
+        String SFTP_HOST = "172.18.13.96";
+        int SFTP_PORT = 22;
+        String SFTP_USER = "fingard1";
+        String SFTP_PASS = "JyB9Wm4qNZ";
+        String SFTP_PATH = "/data/ftp/data/ftp/data/ftp/zhenongfa/recontransdetail/upload";
 
         //应收上传
         String excelName = billName + "_" + tranTime;
@@ -163,11 +167,11 @@ public class Audit327 {
         info.add(wechatPayment);
         info.add(refundPayment);
         //
-        for (BillData data : info){
+        for (BillData data : info) {
             String recordId = data.getRecordId();
             data.setRecordId(recordId);
         }
-        LinkedHashMap<String, List<BillData>> infoMap = excel.PartitionExcel(info,partitionSzie);
+        LinkedHashMap<String, List<BillData>> infoMap = excel.PartitionExcel(info, partitionSzie);
         if (infoMap == null) {
             return;
         }
@@ -182,7 +186,7 @@ public class Audit327 {
 
             //转为LIST
             List<String[]> channelName = channelSet.stream()
-                            .map(name -> new String[]{name})
+                    .map(name -> new String[]{name})
                     .collect(Collectors.toList());
 
             try {
@@ -303,39 +307,39 @@ public class Audit327 {
 //       压缩并加密               Tran_企业编号_业务系统标识_交易日期_唯一编号.zip
         zipPath = zip.zipEncrypt(ExcelsPath, zipPath, passWord, zipName,soleId);
 
-//        // 上传文件（FTP）
-//        try (FileInputStream input = new FileInputStream(new File(zipPath))) {
-//
-//            String fileName = zipPath.substring(zipPath.lastIndexOf('/') + 1);
-//            FtpUtil.upload(SFTP_HOST, SFTP_PORT, SFTP_USER, SFTP_PASS, SFTP_PATH, fileName, input);
-//            // 成功上传后-通知模块
-//            notice.noticeAudit(BASE_PATH, API_PATH, interfaceVersion, transSeqNo, type, SFTP_PATH, zipName);
-//
-//        } catch (FileNotFoundException e) {
-//            throw new RuntimeException("压缩文件找不到 " + zipPath, e);
-//        } catch (IOException e) {
-//            throw new RuntimeException("读取出问题 " + e.getMessage(), e);
-//        } catch (Exception e) {
-//            throw new RuntimeException("FTP出问题 " + e.getMessage(), e);
-//        }
-        //上传文件（SFTP）
-//
-//        try (
-//                FileInputStream input = new FileInputStream(new File(zipPath))){
-//
-//            String fileName = zipPath.substring(zipPath.lastIndexOf('/') + 1);
-//            sftp.upload(SFTP_HOST, SFTP_PORT, SFTP_USER, SFTP_PASS, SFTP_PATH, fileName, input);
-//            //成功上传后-通知模块
-//            notice.noticeAudit(BASE_PATH,API_PATH,interfaceVersion,transSeqNo,type,SFTP_PATH,zipName);
-//        } catch (
-//                FileNotFoundException e) {
-//            throw new RuntimeException("压缩文件找不到 "+zipPath,e);
-//        } catch (
-//                IOException e) {
-//            throw new RuntimeException("读取出问题 "+e.getMessage(),e);
-//        } catch (Exception e) {
-//            throw new RuntimeException("SFTP出问题 "+e.getMessage());
-//        }
-//        notice.noticeAudit(BASE_PATH,API_PATH,interfaceVersion,transSeqNo,type,SFTP_PATH,zipName);
-}
-}
+            // 上传文件（FTP）
+        try (FileInputStream input = new FileInputStream(new File(zipPath))) {
+
+            String fileName = zipPath.substring(zipPath.lastIndexOf('/') + 1);
+            FtpUtil.upload(FTP_HOST, FTP_PORT, FTP_USER, FTP_PASS, FTP_PATH, fileName, input);
+            // 成功上传后-通知模块
+            notice.noticeAudit(BASE_PATH, API_PATH, interfaceVersion, transSeqNo, type, FTP_PATH, zipName);
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("压缩文件找不到 " + zipPath, e);
+        } catch (IOException e) {
+            throw new RuntimeException("读取出问题 " + e.getMessage(), e);
+        } catch (Exception e) {
+            throw new RuntimeException("FTP出问题 " + e.getMessage(), e);
+        }
+//        上传文件（SFTP）
+
+        try (
+                FileInputStream input = new FileInputStream(new File(zipPath))){
+
+            String fileName = "22"+zipPath.substring(zipPath.lastIndexOf('/') + 1);
+            sftp.upload(SFTP_HOST, SFTP_PORT, SFTP_USER, SFTP_PASS, SFTP_PATH, fileName, input);
+            //成功上传后-通知模块
+            notice.noticeAudit(BASE_PATH,API_PATH,interfaceVersion,transSeqNo,type,SFTP_PATH,fileName);
+        } catch (
+                FileNotFoundException e) {
+            throw new RuntimeException("压缩文件找不到 "+zipPath,e);
+        } catch (
+                IOException e) {
+            throw new RuntimeException("读取出问题 "+e.getMessage(),e);
+        } catch (Exception e) {
+            throw new RuntimeException("SFTP出问题 "+e.getMessage());
+        }
+            notice.noticeAudit(BASE_PATH, API_PATH, interfaceVersion, transSeqNo, type, SFTP_PATH, zipName);
+        }
+    }
