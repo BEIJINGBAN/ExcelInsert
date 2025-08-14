@@ -32,6 +32,7 @@ public class FtpUtil {
                 ftpClient.setControlEncoding("UTF-8");
 
                 // 连接服务器
+                log.info("开始连接FTP服务器");
                 ftpClient.connect(host, port);
 
                 // 检查连接是否成功

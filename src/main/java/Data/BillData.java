@@ -85,7 +85,7 @@ public class BillData {
     private String callbackUrl;
 
     //用于唯一的找到该条数据
-    private String recordId = UUID.randomUUID().toString();
+    private String recordId;
 
     public String getOrgCode() {
         return orgCode;
@@ -289,6 +289,10 @@ public class BillData {
 
     public String getRecordId() {
         return recordId;
+    }
+
+    public void setRecordId(String recordId) {
+        this.recordId = recordId;
     }
 
     public String getMerchantOrderNo() {

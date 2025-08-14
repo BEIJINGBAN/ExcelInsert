@@ -16,7 +16,7 @@ public static void Audit321() throws IOException, NoSuchAlgorithmException {
             //日期格式
             SimpleDateFormat sdt = new SimpleDateFormat("yyyyMMdd");
             //一个Excel包含的文件数量
-            int partitionSzie = 1;
+            int partitionSzie = 3;
 
             //压缩密码
             String passWord = "123456";
@@ -132,6 +132,11 @@ public static void Audit321() throws IOException, NoSuchAlgorithmException {
             info.add(test1);
             info.add(test2);
             info.add(test3);
+            //生成唯一ID
+            for (Data data : info){
+                String recordId = data.getRecordId();
+                data.setRecordId(recordId);
+            }
             LinkedHashMap<String, List<Data>> infoMap = excel.PartitionExcel(info,partitionSzie);
             if (infoMap == null) {
                 return;
@@ -229,7 +234,7 @@ public static void Audit321() throws IOException, NoSuchAlgorithmException {
 //        throw new RuntimeException("FTP出问题 " + e.getMessage(), e);
 //    }
 
-            //上传文件（SFTP/FTP）
+//            //上传文件（SFTP/FTP）
 //            try (FileInputStream input = new FileInputStream(new File(zipPath))){
 //
 //                String fileName = zipPath.substring(zipPath.lastIndexOf('/') + 1);

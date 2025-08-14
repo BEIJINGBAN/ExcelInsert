@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.security.DigestOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -175,6 +176,30 @@ public class ExcelUtil {
             this.headerRows = new ArrayList<>(headerRows);
             this.data = data;
         }
+    }
+    public static String recordIdGenerate(Object obj,String[] ignoreFiellds){
+        if (obj == null) {
+            return null;
+        }
+        List<String> ignoreList = Arrays.asList(ignoreFiellds);
+        StringBuilder contetBuilder = new StringBuilder();
+        try{
+            Field[] fields = obj.getClass().getDeclaredFields();
+            Arrays.sort(fields,Comparator.comparing(Field::getName));
+            for (Field field : fields){
+                if (ignoreList.contains(field.getName())){
+                    continue;
+                }
+                contetBuilder.append("|");
+            }
+        }catch (IllegalArgumentException e){
+            log.error("生成唯一ID失败 "+e.getMessage());
+        }
+        String content = contetBuilder.toString();
+        if (content.isEmpty()){
+            return null;
+        }
+        return DigestUtil.sha256Hex(content);
     }
 }
 

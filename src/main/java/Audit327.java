@@ -1,4 +1,5 @@
 import Data.BillData;
+import Data.Data;
 import Util.*;
 
 import java.io.File;
@@ -15,7 +16,7 @@ public class Audit327 {
         //日期格式
         SimpleDateFormat sdt = new SimpleDateFormat("yyyyMMdd");
         //一个Excel包含的文件数量
-        int partitionSzie = 1;
+        int partitionSzie = 2;
 
         //压缩密码
         String passWord = "123456";
@@ -64,7 +65,7 @@ public class Audit327 {
         FtpUtil ftp = new FtpUtil();
 
         //测试数据
-        BillData test1 = new Data.BillData();
+        BillData test1 = new BillData();
         test1.setOrgCode("ORG001");
         test1.setMerchantNo("MCH2023001");
         test1.setMerchantOrderNo("ORD20231116001");
@@ -161,7 +162,11 @@ public class Audit327 {
         info.add(splitPayment);
         info.add(wechatPayment);
         info.add(refundPayment);
-
+        //
+        for (BillData data : info){
+            String recordId = data.getRecordId();
+            data.setRecordId(recordId);
+        }
         LinkedHashMap<String, List<BillData>> infoMap = excel.PartitionExcel(info,partitionSzie);
         if (infoMap == null) {
             return;
@@ -272,7 +277,8 @@ public class Audit327 {
                                                 b.getChannelDiscount(),
                                                 b.getCounterpartyAccountNew(),
                                                 b.getCounterpartyNameNew(),
-                                                b.getCallbackUrl()
+                                                b.getCallbackUrl(),
+                                                b.getRecordId()
                                         })
                                         .collect(Collectors.toList())
                         )
@@ -330,6 +336,6 @@ public class Audit327 {
 //        } catch (Exception e) {
 //            throw new RuntimeException("SFTP出问题 "+e.getMessage());
 //        }
-        notice.noticeAudit(BASE_PATH,API_PATH,interfaceVersion,transSeqNo,type,SFTP_PATH,zipName);
+//        notice.noticeAudit(BASE_PATH,API_PATH,interfaceVersion,transSeqNo,type,SFTP_PATH,zipName);
 }
 }

@@ -3,6 +3,7 @@ package Util;
 import cn.hutool.core.text.StrPool;
 import cn.hutool.core.util.StrUtil;
 import com.jcraft.jsch.*;
+import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
 import java.io.InputStream;
@@ -16,7 +17,9 @@ import java.util.logging.Logger;
 public class SftpUtil {
 
 //    private final static Logger  logger = Logger.getLogger(SftpUtil.class);
-    protected final static int CLIENT_TIMEOUT = 1000 * 20;
+    protected final static int CLIENT_TIMEOUT = 1000 * 10;
+    private static final org.apache.logging.log4j.Logger log = LogManager.getLogger(SftpUtil.class);
+
     // 登录
     public static ChannelSftp login(String host, int port,String username, String password ) throws Exception {
         Session session;
@@ -28,12 +31,14 @@ public class SftpUtil {
             Properties config = new Properties();
             config.put("StrictHostKeyChecking", "no");
             session.setConfig(config);
+            log.info("开始连接SFTP服务器");
             session.connect();
             Channel channel = session.openChannel("sftp");
             channel.connect();
             ChannelSftp sftp = (ChannelSftp) channel;
             return sftp;
         }catch (JSchException e){
+            log.error("连接失败 " + e);
            throw new Exception("连接服务器异常");
         }
     }

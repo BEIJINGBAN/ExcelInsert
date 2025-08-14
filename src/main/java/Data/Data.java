@@ -55,7 +55,7 @@ public class Data {
 //	扩展信息	json	N	企业自定义的扩展信息，json格式，根据稽核业务场景需要而补充的额外信息，比如客户名称、房间信息等等，最多支持20个扩展字段。所有字段均按原值展示，如果存在金额类型的字段，统一按【元】为单位传值。示例：{	"extend1": "商品名称",	"extend2": "购买数量",	"extend3": "运费",	"extend4": "单位金额",	"extend5": "购买人名称",	"extend6": "客户ID",	"extend20": "其他自定义字段，最多支持20个"}
     private String extendInfo;
     //未来用于唯一找到一条记录的方法ID
-    private String recordId = UUID.randomUUID().toString();
+    private String recordId;
 
     public String getRecordId() {
         return recordId;
