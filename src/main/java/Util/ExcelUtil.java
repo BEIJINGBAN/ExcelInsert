@@ -27,7 +27,6 @@ public class ExcelUtil {
     public <T> LinkedHashMap PartitionExcel(List<T> info, int maxSize){
         if (info == null || info.size() == 0) {
             log.error("没有数据需要分割");
-//            System.out.println("没有数据需要分割");
             return null;
         }
 
@@ -121,7 +120,6 @@ public class ExcelUtil {
                     workbook.write(fos);
                 }
                 log.info("成功生成EXCEL,地址为 "+file.getCanonicalFile());
-//                System.out.println("成功生成EXCEL,地址为 "+file.getCanonicalFile());
             }finally {
                 workbook.close();
             }

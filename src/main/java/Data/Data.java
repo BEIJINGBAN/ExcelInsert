@@ -3,7 +3,7 @@ package Data;
 import java.util.Date;
 import java.util.UUID;
 
-public class Data {
+public class  Data {
 
 //	订单组织代码	String(32)	Y	订单所属组织
     private String orderOrgCode;

@@ -1,13 +1,16 @@
 package Util;
 
 import Config.Constants;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.TreeMap;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class NoticeUtil {
@@ -23,12 +26,43 @@ public class NoticeUtil {
     private static final com.fasterxml.jackson.databind.ObjectMapper mapper = new ObjectMapper();
 
     //Json格式
-    public static class RequestBodyJson {
+    public static class BizContent {
         public String interfaceVersion;
         public String transSeqNo;
         public String type;
         public String filePath;
         public String fileName;
+
+        public BizContent(String interfaceVersion, String transSeqNo,
+                          String type, String filePath, String fileName){
+            this.interfaceVersion=interfaceVersion;
+            this.transSeqNo=transSeqNo;
+            this.type=type;
+            this.filePath = filePath;
+            this.fileName = fileName;
+        }
+    }
+
+    public static class RequestBody{
+        public String mchId;
+        public String version;
+        public String signType;
+        public String nonceStr;
+        public String uniqueNo;
+        public String bizContent;
+
+        public RequestBody(String mchId, String version, String signType, String nonceStr, String uniqueNo, String bizContent) {
+            this.mchId = mchId;
+            this.version = version;
+            this.signType = signType;
+            this.nonceStr = nonceStr;
+            this.uniqueNo = uniqueNo;
+            this.bizContent = bizContent;
+        }
+    }
+
+    private static String generateNonceStr() {
+        return UUID.randomUUID().toString().replaceAll("-", "").substring(0, 32);
     }
 
     public static boolean noticeAudit(String BASE_URL, String API_PATH,
@@ -37,21 +71,27 @@ public class NoticeUtil {
 
 
         boolean result = false;
-        RequestBodyJson requestBodyJson = new RequestBodyJson();
-        requestBodyJson.interfaceVersion = interfaceVersion;
-        requestBodyJson.transSeqNo = transSeqNo;
-        requestBodyJson.type = type;
-        requestBodyJson.filePath = filePath;
-        requestBodyJson.fileName = fileName;
+
+        //随机计算
+        String nonceStr = generateNonceStr();
+        String uniqueNo = generateNonceStr();
+
+        TreeMap<String,Object> bizContentObj = new TreeMap<>();
+        bizContentObj.put("interfaceVersion",interfaceVersion);
+        bizContentObj.put("transSeqNo",transSeqNo);
+        bizContentObj.put("type",type);
+        bizContentObj.put("filePath",filePath);
+        bizContentObj.put("fileName",fileName);
 
         //
         try {
             TreeMap<String, Object> paramMap = new TreeMap<>();
-            paramMap.put("interfaceVersion", requestBodyJson.interfaceVersion);
-            paramMap.put("transSeqNo", requestBodyJson.transSeqNo);
-            paramMap.put("type", requestBodyJson.type);
-            paramMap.put("filePath", requestBodyJson.filePath);
-            paramMap.put("fileName", requestBodyJson.fileName);
+            paramMap.put("bizContent", bizContentObj);
+            paramMap.put("mchId", Constants.MCH_ID);
+            paramMap.put("version", Constants.VERSION);
+            paramMap.put("signType",Constants.SIGN_TYPE );
+            paramMap.put("nonceStr", nonceStr);
+            paramMap.put("uniqueNo", uniqueNo);
 
             String signContent = SignUtil.genSignContentWithSalt(paramMap, Constants.SALT_KEY);
             log.info("待签名字符串： " + signContent);
@@ -63,16 +103,19 @@ public class NoticeUtil {
             }
             log.info("签名" + sign);
 
-            paramMap.put("sign", sign);
 
-            String json = mapper.writeValueAsString(paramMap);
+            Map<String, Object> finalJson = new TreeMap<>();
+            finalJson.putAll(paramMap);
+            finalJson.put("sign", sign);
+
+            String json = mapper.writeValueAsString(finalJson);
             log.info("请求JSON为 ： " + json);
 
-            //构造请求
             Request request = new Request.Builder()
                     .url(BASE_URL + API_PATH)
-                    .post(RequestBody.create(json, MediaType.get("application/json;charset=utf-8")))
+                    .post(okhttp3.RequestBody.create(json,MediaType.get(("application/json; charset=utf-8"))))
                     .build();
+
 
             try (Response response = client.newCall(request).execute()) {
                 if (response.isSuccessful()) {
