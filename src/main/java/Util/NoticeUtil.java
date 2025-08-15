@@ -22,12 +22,6 @@ public class NoticeUtil {
 
     private static final com.fasterxml.jackson.databind.ObjectMapper mapper = new ObjectMapper();
 
-    //配置
-    private static final String PRIVATE_KEY = Constants.PRIVATE_KEY;                                   //私钥
-    private static final String SALT_KEY = "c9b576e12251f3a7f30c548672fcbd9a";          //盐值
-    private static final String SIGN_ALGORITHM = "SHA256withRSA";             //签名算法
-    private static final String CHARSET = "UTF-8";                            //字符集
-
     //Json格式
     public static class RequestBodyJson {
         public String interfaceVersion;
@@ -59,10 +53,10 @@ public class NoticeUtil {
             paramMap.put("filePath", requestBodyJson.filePath);
             paramMap.put("fileName", requestBodyJson.fileName);
 
-            String signContent = SignUtil.genSignContentWithSalt(paramMap, SALT_KEY);
+            String signContent = SignUtil.genSignContentWithSalt(paramMap, Constants.SALT_KEY);
             log.info("待签名字符串： " + signContent);
 
-            String sign = SignUtil.rsaSign(signContent, PRIVATE_KEY, SIGN_ALGORITHM, CHARSET);
+            String sign = SignUtil.rsaSign(signContent, Constants.PRIVATE_KEY, Constants.SIGN_ALGORITHM, Constants.CHARSET);
             if (sign == null || sign.trim().isEmpty()) {
                 log.info("签名失败，检查私钥格式");
                 result = false;

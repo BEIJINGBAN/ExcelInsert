@@ -16,8 +16,6 @@ public class Audit321 {
         //应收账单3.2.1
         //日期格式
         SimpleDateFormat sdt = new SimpleDateFormat("yyyyMMdd");
-        //一个Excel包含的文件数量
-        int partitionSzie = excelSize;
 
         String soleID = "";
 
@@ -122,120 +120,120 @@ public class Audit321 {
         info.add(test2);
         info.add(test3);
         //生成唯一ID
-        for (Data data : info) {
-            String recordId = data.getRecordId();
-            data.setRecordId(recordId);
-        }
-        LinkedHashMap<String, List<Data>> infoMap = excel.PartitionExcel(info, partitionSzie);
-        if (infoMap == null) {
-            return;
-        }
-        for (Map.Entry<String, List<Data>> entry : infoMap.entrySet()) {
-            String filePath = ExcelPath + excelName + "_" + entry.getKey();
-            List<Data> data = entry.getValue();
-            int total = data.size();
-            //总金额
-            int amount = data.stream()
-                    .mapToInt(d -> Integer.parseInt(d.getAmount()))
-                    .sum();
-
-            ExcelUtil.ExcelGenerator excelGenerator = ExcelUtil.ExcelGenerator.create()
-                    //表一
-                    .sheet("总览表", new String[]{"总笔数", "总金额"},
-                            Arrays.<String[]>asList(
-                                    new String[]{String.valueOf(total), String.valueOf(amount)}
-                            )
-                    )
-                    //表二
-                    .sheet("明细表", new String[]{
-                                    "订单组织代码", "收单商户号",
-                                    "业务系统标识",
-                                    "应收单号",
-                                    "商户订单号",
-                                    "渠道流水号",
-                                    "收支方向",
-                                    "金额",
-                                    "交易时间",
-                                    "原交易日期",
-                                    "企业收银方式",
-                                    "备注",
-                                    "对方户名",
-                                    "对方账号",
-                                    "对方银行",
-                                    "用途",
-                                    "结果通知地址",
-                                    "发货类订单标识",
-                                    "确认收货时间",
-                                    "扩展信息"},
-                            data.stream()
-                                    .map(d -> new String[]{
-                                            d.getOrderOrgCode(),
-                                            d.getAcquiringMerchantNo(),
-                                            d.getBizSystemCode(),
-                                            d.getReceivableOrderNo(),
-                                            d.getMerchantOrderNo(),
-                                            d.getChannelSerialNo(),
-                                            d.getIncomeExpenseFlag(),
-                                            d.getAmount(),
-                                            (d.getTradeTime() != null ? d.getTradeTime().toString() : null),
-                                            (d.getOriginalTradeTime() != null ? d.getOriginalTradeTime().toString() : null),
-                                            d.getEnterpriseCashieType(),
-                                            d.getRemark(),
-                                            d.getCounterpartyName(),
-                                            d.getCounterpartyAccount(),
-                                            d.getCounterpartyBank(),
-                                            d.getPurpose(),
-                                            d.getAuditNotifyUrl(),
-                                            d.getDeliveryOrderFlag(),
-                                            (d.getConfirmReceiveTime() != null ? d.getConfirmReceiveTime().toString() : null),
-                                            d.getExtendInfo(),
-                                            d.getRecordId()})
-                                    .collect(Collectors.toList())
-                    );
-            try {
-                soleID = excelGenerator.calcultateContentHash();
-                excelGenerator.save(filePath);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (NoSuchAlgorithmException e) {
-                throw new RuntimeException(e);
-            }
-        }
+//        for (Data data : info) {
+//            String recordId = data.getRecordId();
+//            data.setRecordId(recordId);
+//        }
+//        LinkedHashMap<String, List<Data>> infoMap = excel.PartitionExcel(info,excelSize);
+//        if (infoMap == null) {
+//            return;
+//        }
+//        for (Map.Entry<String, List<Data>> entry : infoMap.entrySet()) {
+//            String filePath = ExcelPath + excelName + "_" + entry.getKey();
+//            List<Data> data = entry.getValue();
+//            int total = data.size();
+//            //总金额
+//            int amount = data.stream()
+//                    .mapToInt(d -> Integer.parseInt(d.getAmount()))
+//                    .sum();
+//
+//            ExcelUtil.ExcelGenerator excelGenerator = ExcelUtil.ExcelGenerator.create()
+//                    //表一
+//                    .sheet("总览表", new String[]{"总笔数", "总金额"},
+//                            Arrays.<String[]>asList(
+//                                    new String[]{String.valueOf(total), String.valueOf(amount)}
+//                            )
+//                    )
+//                    //表二
+//                    .sheet("明细表", new String[]{
+//                                    "订单组织代码", "收单商户号",
+//                                    "业务系统标识",
+//                                    "应收单号",
+//                                    "商户订单号",
+//                                    "渠道流水号",
+//                                    "收支方向",
+//                                    "金额",
+//                                    "交易时间",
+//                                    "原交易日期",
+//                                    "企业收银方式",
+//                                    "备注",
+//                                    "对方户名",
+//                                    "对方账号",
+//                                    "对方银行",
+//                                    "用途",
+//                                    "结果通知地址",
+//                                    "发货类订单标识",
+//                                    "确认收货时间",
+//                                    "扩展信息"},
+//                            data.stream()
+//                                    .map(d -> new String[]{
+//                                            d.getOrderOrgCode(),
+//                                            d.getAcquiringMerchantNo(),
+//                                            d.getBizSystemCode(),
+//                                            d.getReceivableOrderNo(),
+//                                            d.getMerchantOrderNo(),
+//                                            d.getChannelSerialNo(),
+//                                            d.getIncomeExpenseFlag(),
+//                                            d.getAmount(),
+//                                            (d.getTradeTime() != null ? d.getTradeTime().toString() : null),
+//                                            (d.getOriginalTradeTime() != null ? d.getOriginalTradeTime().toString() : null),
+//                                            d.getEnterpriseCashieType(),
+//                                            d.getRemark(),
+//                                            d.getCounterpartyName(),
+//                                            d.getCounterpartyAccount(),
+//                                            d.getCounterpartyBank(),
+//                                            d.getPurpose(),
+//                                            d.getAuditNotifyUrl(),
+//                                            d.getDeliveryOrderFlag(),
+//                                            (d.getConfirmReceiveTime() != null ? d.getConfirmReceiveTime().toString() : null),
+//                                            d.getExtendInfo(),
+//                                            d.getRecordId()})
+//                                    .collect(Collectors.toList())
+//                    );
+//            try {
+//                soleID = excelGenerator.calcultateContentHash();
+//                excelGenerator.save(filePath);
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            } catch (NoSuchAlgorithmException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
 //        //取绝对路径
-        File excels = new File(ExcelPath);
-        String ExcelsPath = excels.getAbsolutePath();
-//       压缩并加密               Tran_企业编号_业务系统标识_交易日期_唯一编号.zip
-        zipPath = zip.zipEncrypt(ExcelsPath, zipPath, Constants.ZIP_PASSWORD, zipName, soleID);
+//        File excels = new File(ExcelPath);
+//        String ExcelsPath = excels.getAbsolutePath();
+////       压缩并加密               Tran_企业编号_业务系统标识_交易日期_唯一编号.zip
+//        zipPath = zip.zipEncrypt(ExcelsPath, zipPath, Constants.ZIP_PASSWORD, zipName, soleID);
 
-         //上传文件（FTP）
-    try (FileInputStream input = new FileInputStream(new File(zipPath))) {
-
-        String fileName = zipPath.substring(zipPath.lastIndexOf('/') + 1);
-        FtpUtil.upload(Constants.FTP_HOST, Constants.FTP_PORT, Constants.FTP_USER, Constants.FTP_PASS, Constants.FTP_PATH, fileName, input);
-        // 成功上传后-通知模块
-        notice.noticeAudit(Constants.BASE_PATH, Constants.API_PATH, interfaceVersion, transSeqNo, type, Constants.FTP_PATH, zipName);
-
-    } catch (FileNotFoundException e) {
-        throw new RuntimeException("压缩文件找不到 " + zipPath, e);
-    } catch (IOException e) {
-        throw new RuntimeException("读取出问题 " + e.getMessage(), e);
-    } catch (Exception e) {
-        throw new RuntimeException("FTP出问题 " + e.getMessage(), e);
-    }
+        // 上传文件（FTP）
+//    try (FileInputStream input = new FileInputStream(new File(zipPath))) {
+//
+//        String fileName = zipPath.substring(zipPath.lastIndexOf('/') + 1);
+//        FtpUtil.upload(FTP_HOST, FTP_PORT, FTP_USER, FTP_PASS, FTP_PATH, fileName, input);
+//        // 成功上传后-通知模块
+//        notice.noticeAudit(BASE_PATH, API_PATH, interfaceVersion, transSeqNo, type, FTP_PATH, zipName);
+//
+//    } catch (FileNotFoundException e) {
+//        throw new RuntimeException("压缩文件找不到 " + zipPath, e);
+//    } catch (IOException e) {
+//        throw new RuntimeException("读取出问题 " + e.getMessage(), e);
+//    } catch (Exception e) {
+//        throw new RuntimeException("FTP出问题 " + e.getMessage(), e);
+//    }
         notice.noticeAudit(Constants.BASE_PATH, Constants.API_PATH, interfaceVersion, transSeqNo, type, Constants.FTP_PATH, zipName);
         //上传文件（SFTP）
-            try (FileInputStream input = new FileInputStream(new File(zipPath))){
-
-                String fileName = zipPath.substring(zipPath.lastIndexOf('/') + 1);
-                sftp.upload(Constants.SFTP_HOST, Constants.SFTP_PORT, Constants.SFTP_USER, Constants.SFTP_PASS, Constants.SFTP_PATH, fileName, input);
-                //成功上传后-通知模块
-                notice.noticeAudit(Constants.BASE_PATH,Constants.API_PATH,interfaceVersion,transSeqNo,type,Constants.SFTP_PATH,fileName);
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException("压缩文件找不到 "+zipPath,e);
-            } catch (IOException e) {
-                throw new RuntimeException("读取出问题 "+e.getMessage(),e);
-            } catch (Exception e) {
-                throw new RuntimeException("SFTP出问题 "+e.getMessage());
-            }
+//            try (FileInputStream input = new FileInputStream(new File(zipPath))){
+//
+//                String fileName = zipPath.substring(zipPath.lastIndexOf('/') + 1);
+//                sftp.upload(Constants.SFTP_HOST, Constants.SFTP_PORT, Constants.SFTP_USER, Constants.SFTP_PASS, Constants.SFTP_PATH, fileName, input);
+//                //成功上传后-通知模块
+//                notice.noticeAudit(Constants.BASE_PATH,Constants.API_PATH,interfaceVersion,transSeqNo,type,Constants.SFTP_PATH,fileName);
+//            } catch (FileNotFoundException e) {
+//                throw new RuntimeException("压缩文件找不到 "+zipPath,e);
+//            } catch (IOException e) {
+//                throw new RuntimeException("读取出问题 "+e.getMessage(),e);
+//            } catch (Exception e) {
+//                throw new RuntimeException("SFTP出问题 "+e.getMessage());
+//            }
         }
 }
