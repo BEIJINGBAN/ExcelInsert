@@ -9,7 +9,7 @@ public class Constants {
     public static final String SALT_KEY = "c9b576e12251f3a7f30c548672fcbd9a";             //盐值
     public static final String SIGN_TYPE = "SHA256withRSA";               //签名算法
     public static final String CHARSET = "UTF-8";
-    public static final String MCH_ID ="10000";
+    public static final String MCH_ID ="ZN330301";
     public static final String VERSION = "1.0";
     public static final String SIGN_ALGORITHM = "SHA256withRSA";
 
@@ -28,8 +28,8 @@ public class Constants {
     public static final    int SFTP_PORT = 22;
     public static final String SFTP_USER = "fingard1";
     public static final String SFTP_PASS = "JyB9Wm4qNZ";
-    public static final String SFTP_PATH = "/data/ftp/data/ftp/data/ftp/zhenongfa/expectdetail/upload";
-
+    public static final String SFTP_PATH_321 = "/data/ftp/data/ftp/data/ftp/zhenongfa/expectdetail/upload";
+    public static final String SFTP_PATH_327 = "/data/ftp/data/ftp/data/ftp/zhenongfa/recontransdetail/upload";
     //通知地址
     public static final String BASE_PATH = "http://10.60.45.34:8204";
     public static final String API_PATH = "/yqs/openapi/v1/audit/notify/fileUploadNotify";

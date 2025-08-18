@@ -32,6 +32,7 @@ public class Audit327 {
         String type = "1";
 
         //应收上传
+        String filePath = "";
         String excelName = billName + "_" + tranTime;
         String zipName = billName + "_" + tranTime;
         String soleId = "";
@@ -144,145 +145,145 @@ public class Audit327 {
         info.add(wechatPayment);
         info.add(refundPayment);
 
-//        for (BillData data : info) {
-//            String recordId = data.getRecordId();
-//            data.setRecordId(recordId);
-//        }
-//        LinkedHashMap<String, List<BillData>> infoMap = excel.PartitionExcel(info, excelSize);
-//        if (infoMap == null) {
-//            return;
-//        }
-//        for (Map.Entry<String, List<BillData>> entry : infoMap.entrySet()) {
-//            String filePath = ExcelPath + excelName + "_" + entry.getKey();
-//            List<BillData> data = entry.getValue();
-//            //渠道数量
-//            Set<String> channelSet = data.stream()
-//                    .map(BillData::getChannelName)
-//                    .filter(Objects::nonNull)
-//                    .collect(Collectors.toSet());
-//
-//            //转为LIST
-//            List<String[]> channelName = channelSet.stream()
-//                    .map(name -> new String[]{name})
-//                    .collect(Collectors.toList());
-//
-//            try {
-//                ExcelUtil.ExcelGenerator excelGenerator = ExcelUtil.ExcelGenerator.create()
-//                        //表一
-//                        .sheet("收单对账数据",
-//                                Arrays.asList(
-//                                        new String[]{
-//                                        "组织",
-//                                        "商户号",
-//                                        "商户订单号",
-//                                        "保融交易流水号",
-//                                        "渠道流水号",
-//                                        "第三方交易流水号",
-//                                        "原保融交易流水号",
-//                                        "渠道名称",
-//                                        "交易方向",
-//                                        "交易日期",
-//                                        "清算日期",
-//                                        "交易金额",
-//                                        "手续费",
-//                                        "支付方式",
-//                                        "终端号",
-//                                        "分账标记",
-//                                        "分账订单组织",
-//                                        "分账入账方商户号",
-//                                        "分账明细流水号",
-//                                        "分账金额",
-//                                        "分账子单手续费",
-//                                        "商家优惠金额",
-//                                        "平台优惠金额",
-//                                        "渠道优惠金额",
-//                                        "对方账号",
-//                                        "对方户名",
-//                                        "回调通知地址"
-//                                },
-//                                    new String[]{
-//                                        "必填，填写组织编号",
-//                                            "必填",
-//                                            "必填" ,
-//                                            "必填， 如果非保融渠道交易，填写收单渠道返回的流水号" ,
-//                                            "必填,指收单渠道返回的流水号" ,
-//                                            "非必填，指支付宝、微信的流水号" ,
-//                                            "退款时必填，指原收款保融交易流水号" ,
-//                                            "必填，详见<渠道名称>sheet",
-//                                            "必填，收入/支出" ,
-//                                            "必填，格式为yyyy-mm-dd，例如2023-11-16" ,
-//                                            "必填，格式为yyyy-mm-dd，例如2023-11-16" ,
-//                                            "必填，单位元，保留2位小数" ,
-//                                            "必填，单位元，保留2位小数" ,
-//                                            "必填，支付宝/微信/银联/数字人民币/网关支付/银行卡" ,
-//                                            "非必填" ,
-//                                            "必填，不分账/支付时分账/支付后分账" ,
-//                                            "支付时分账交易必填，填写组织编号" ,
-//                                            "支付时分账交易必填" ,
-//                                            "支付时分账交易必填" ,
-//                                            "支付时分账交易必填" ,
-//                                            "支付时分账交易必填" ,
-//                                            "非必填" ,
-//                                            "非必填" ,
-//                                            "非必填" ,
-//                                            "非必填" ,
-//                                            "非必填" ,
-//                                            "必填，如果不传，数据有问题时结果没法回传，数据消息会丢失。长度256"
-//                                    }
-//                                ),
-//                                data.stream()
-//                                        .map(b -> new String[]{
-//                                                b.getOrgCode(),
-//                                                b.getMerchantNo(),
-//                                                b.getMerchantOrderNo(),
-//                                                b.getBaoRongSerialNo(),
-//                                                b.getChannelSerialNo(),
-//                                                b.getThirdPartySerialNo(),
-//                                                b.getOriginalBaoRongSerialNo(),
-//                                                b.getChannelName(),
-//                                                b.getTradeDirection(),
-//                                                b.getTradeDate(),
-//                                                b.getSettleDate(),
-//                                                b.getTradeAmount(),
-//                                                b.getFee(),
-//                                                b.getPayMethod(),
-//                                                b.getTerminalId(),
-//                                                b.getSplitFlag(),
-//                                                b.getSplitOrgCode(),
-//                                                b.getSplitMerchantNo(),
-//                                                b.getSplitDetailSerialNo(),
-//                                                b.getSplitAmount(),
-//                                                b.getSplitFee(),
-//                                                b.getMerchantDiscount(),
-//                                                b.getPlatformDiscount(),
-//                                                b.getChannelDiscount(),
-//                                                b.getCounterpartyAccountNew(),
-//                                                b.getCounterpartyNameNew(),
-//                                                b.getCallbackUrl(),
-//                                                b.getRecordId()
-//                                        })
-//                                        .collect(Collectors.toList())
-//                        )
-//                        //表二
-//                        .sheet("渠道名称",
-//                                //标题
-//                                new String[]{
-//                                        "渠道名称"},
-//                                channelName
-//                        );
-//                soleId = excelGenerator.calcultateContentHash();
-//                excelGenerator.save(filePath);
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            } catch (NoSuchAlgorithmException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
+        for (BillData data : info) {
+            String recordId = data.getRecordId();
+            data.setRecordId(recordId);
+        }
+        LinkedHashMap<String, List<BillData>> infoMap = excel.PartitionExcel(info, excelSize,excelName);
+        if (infoMap == null) {
+            return;
+        }
+        for (Map.Entry<String, List<BillData>> entry : infoMap.entrySet()) {
+            filePath = ExcelPath + entry.getKey();
+            List<BillData> data = entry.getValue();
+            //渠道数量
+            Set<String> channelSet = data.stream()
+                    .map(BillData::getChannelName)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toSet());
+
+            //转为LIST
+            List<String[]> channelName = channelSet.stream()
+                    .map(name -> new String[]{name})
+                    .collect(Collectors.toList());
+
+            try {
+                ExcelUtil.ExcelGenerator excelGenerator = ExcelUtil.ExcelGenerator.create()
+                        //表一
+                        .sheet("收单对账数据",
+                                Arrays.asList(
+                                        new String[]{
+                                        "组织",
+                                        "商户号",
+                                        "商户订单号",
+                                        "保融交易流水号",
+                                        "渠道流水号",
+                                        "第三方交易流水号",
+                                        "原保融交易流水号",
+                                        "渠道名称",
+                                        "交易方向",
+                                        "交易日期",
+                                        "清算日期",
+                                        "交易金额",
+                                        "手续费",
+                                        "支付方式",
+                                        "终端号",
+                                        "分账标记",
+                                        "分账订单组织",
+                                        "分账入账方商户号",
+                                        "分账明细流水号",
+                                        "分账金额",
+                                        "分账子单手续费",
+                                        "商家优惠金额",
+                                        "平台优惠金额",
+                                        "渠道优惠金额",
+                                        "对方账号",
+                                        "对方户名",
+                                        "回调通知地址"
+                                },
+                                    new String[]{
+                                        "必填，填写组织编号",
+                                            "必填",
+                                            "必填" ,
+                                            "必填， 如果非保融渠道交易，填写收单渠道返回的流水号" ,
+                                            "必填,指收单渠道返回的流水号" ,
+                                            "非必填，指支付宝、微信的流水号" ,
+                                            "退款时必填，指原收款保融交易流水号" ,
+                                            "必填，详见<渠道名称>sheet",
+                                            "必填，收入/支出" ,
+                                            "必填，格式为yyyy-mm-dd，例如2023-11-16" ,
+                                            "必填，格式为yyyy-mm-dd，例如2023-11-16" ,
+                                            "必填，单位元，保留2位小数" ,
+                                            "必填，单位元，保留2位小数" ,
+                                            "必填，支付宝/微信/银联/数字人民币/网关支付/银行卡" ,
+                                            "非必填" ,
+                                            "必填，不分账/支付时分账/支付后分账" ,
+                                            "支付时分账交易必填，填写组织编号" ,
+                                            "支付时分账交易必填" ,
+                                            "支付时分账交易必填" ,
+                                            "支付时分账交易必填" ,
+                                            "支付时分账交易必填" ,
+                                            "非必填" ,
+                                            "非必填" ,
+                                            "非必填" ,
+                                            "非必填" ,
+                                            "非必填" ,
+                                            "必填，如果不传，数据有问题时结果没法回传，数据消息会丢失。长度256"
+                                    }
+                                ),
+                                data.stream()
+                                        .map(b -> new String[]{
+                                                b.getOrgCode(),
+                                                b.getMerchantNo(),
+                                                b.getMerchantOrderNo(),
+                                                b.getBaoRongSerialNo(),
+                                                b.getChannelSerialNo(),
+                                                b.getThirdPartySerialNo(),
+                                                b.getOriginalBaoRongSerialNo(),
+                                                b.getChannelName(),
+                                                b.getTradeDirection(),
+                                                b.getTradeDate(),
+                                                b.getSettleDate(),
+                                                b.getTradeAmount(),
+                                                b.getFee(),
+                                                b.getPayMethod(),
+                                                b.getTerminalId(),
+                                                b.getSplitFlag(),
+                                                b.getSplitOrgCode(),
+                                                b.getSplitMerchantNo(),
+                                                b.getSplitDetailSerialNo(),
+                                                b.getSplitAmount(),
+                                                b.getSplitFee(),
+                                                b.getMerchantDiscount(),
+                                                b.getPlatformDiscount(),
+                                                b.getChannelDiscount(),
+                                                b.getCounterpartyAccountNew(),
+                                                b.getCounterpartyNameNew(),
+                                                b.getCallbackUrl(),
+                                                b.getRecordId()
+                                        })
+                                        .collect(Collectors.toList())
+                        )
+                        //表二
+                        .sheet("渠道名称",
+                                //标题
+                                new String[]{
+                                        "渠道名称"},
+                                channelName
+                        );
+                soleId = excelGenerator.calcultateContentHash();
+                excelGenerator.save(filePath);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            }
+        }
 //        //取绝对路径
 //        File excels = new File(ExcelPath);
 //        String ExcelsPath = excels.getAbsolutePath();
-////       压缩并加密               Tran_企业编号_业务系统标识_交易日期_唯一编号.zip
-//        zipPath = zip.zipEncrypt(ExcelsPath, zipPath, Constants.ZIP_PASSWORD, zipName,soleId);
+//       压缩并加密               Tran_企业编号_业务系统标识_交易日期_唯一编号.zip
+//        zipPath = zip.zipEncrypt(ExcelsPath, zipPath, Constants.ZIP_PASSWORD, zipName);
 
 ////             上传文件（FTP）
 //        try (FileInputStream input = new FileInputStream(new File(zipPath))) {
@@ -299,24 +300,23 @@ public class Audit327 {
 //        } catch (Exception e) {
 //            throw new RuntimeException("FTP出问题 " + e.getMessage(), e);
 //        }
-////        上传文件（SFTP）
-//
-//        try (
-//                FileInputStream input = new FileInputStream(new File(zipPath))){
-//
-//            String fileName = "22"+zipPath.substring(zipPath.lastIndexOf('/') + 1);
-//            sftp.upload(Constants.SFTP_HOST, Constants.SFTP_PORT, Constants.SFTP_USER, Constants.SFTP_PASS, Constants.SFTP_PATH, fileName, input);
-//            //成功上传后-通知模块
-//            notice.noticeAudit(Constants.BASE_PATH,Constants.API_PATH,interfaceVersion,transSeqNo,type,Constants.SFTP_PATH,fileName);
-//        } catch (
-//                FileNotFoundException e) {
-//            throw new RuntimeException("压缩文件找不到 "+zipPath,e);
-//        } catch (
-//                IOException e) {
-//            throw new RuntimeException("读取出问题 "+e.getMessage(),e);
-//        } catch (Exception e) {
-//            throw new RuntimeException("SFTP出问题 "+e.getMessage());
-//        }
-            notice.noticeAudit(Constants.BASE_PATH,Constants.API_PATH, interfaceVersion, transSeqNo, type, Constants.SFTP_PATH, zipName);
+//        上传文件（SFTP）
+
+        try (
+                FileInputStream input = new FileInputStream(new File(filePath))){
+
+            String fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
+            sftp.upload(Constants.SFTP_HOST, Constants.SFTP_PORT, Constants.SFTP_USER, Constants.SFTP_PASS, Constants.SFTP_PATH_327, fileName, input);
+            //成功上传后-通知模块
+            notice.noticeAudit(Constants.BASE_PATH,Constants.API_PATH,interfaceVersion,transSeqNo,type,Constants.SFTP_PATH_327,fileName);
+        } catch (
+                FileNotFoundException e) {
+            throw new RuntimeException("压缩文件找不到 "+zipPath,e);
+        } catch (
+                IOException e) {
+            throw new RuntimeException("读取出问题 "+e.getMessage(),e);
+        } catch (Exception e) {
+            throw new RuntimeException("SFTP出问题 "+e.getMessage());
+        }
         }
     }

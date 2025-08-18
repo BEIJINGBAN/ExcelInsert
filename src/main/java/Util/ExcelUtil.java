@@ -24,14 +24,14 @@ public class ExcelUtil {
     private static final Logger log = LogManager.getLogger(ExcelUtil.class);
 
     //分割Excel
-    public <T> LinkedHashMap PartitionExcel(List<T> info, int maxSize){
-        if (info == null || info.size() == 0) {
+    public <T> LinkedHashMap PartitionExcel(List<T> info, int maxSize,String baseName){
+        if (info == null || info.size() == 0 ) {
             log.error("没有数据需要分割");
             return null;
         }
+        int divisionSize = (info.size() + (maxSize - 1)) / maxSize;
 
         LinkedHashMap<String,List<T>> InfoMap = new LinkedHashMap<>();
-
         //文件从1开始
         int ExcelIndex = 1;
         int j = 0;
@@ -46,7 +46,7 @@ public class ExcelUtil {
                 list.add(info.get(j));
             }
             //取名
-            String ExcelName = String.format("%03d.xlsx",ExcelIndex);
+            String ExcelName = (divisionSize == 1) ? baseName +".xlsx" :  baseName + "_" + String.format("%03d.xlsx",ExcelIndex);
 
             InfoMap.put(ExcelName,list);
 
