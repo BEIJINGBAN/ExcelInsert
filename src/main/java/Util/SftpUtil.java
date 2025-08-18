@@ -80,19 +80,19 @@ public class SftpUtil {
     public static boolean upload(String host, int port, String username,
                               String password, String basePath,
                               String sftpFileName, InputStream input)throws Exception{
-        System.out.println("Sftp开始上传");
+        log.info("Sftp开始上传");
         boolean success = true;
         ChannelSftp sftp = login(host, port, username, password);
         mkdir(sftp, basePath);
         try{
             sftp.put(input, sftpFileName);
         }catch(SftpException e){
-            System.out.println("上传文件失败"+e);
+            log.error("上传文件失败"+e);
             success = false;
         }finally {
             logout(sftp);
         }
-        System.out.println("文件上传完成");
+        log.info("文件上传完成");
         return success;
     }
 
@@ -109,7 +109,7 @@ public class SftpUtil {
             String fileName = filePath.substring(filePath.lastIndexOf(File.separator)+1);
             sftp.rm(fileName);
         }catch (Exception e){
-            System.out.println("删除失败 "+e);
+            log.error("删除失败 "+e);
             success = false;
         }finally {
             logout(sftp);
@@ -135,7 +135,7 @@ public class SftpUtil {
                 }
             }
         }catch(Exception e){
-            System.out.println("查询失败"+e);
+            log.error("查询失败"+e);
             success = false;
         }finally {
             logout(sftp);
@@ -156,7 +156,7 @@ public class SftpUtil {
                 filelist.add(lsEntry.getFilename());
             }
         }catch (Exception e){
-            System.out.println("查询失败"+e);
+            log.error("查询失败"+e);
         }finally {
             logout(sftp);
         }
@@ -175,7 +175,7 @@ public class SftpUtil {
             sftp.cd(directory);
             sftp.rename(oldFileName, newFileName);
         }catch (Exception e){
-            System.out.println("重命名失败 "+ e);
+            log.error("重命名失败 "+ e);
             success = false;
         } finally {
             logout(sftp);
@@ -202,14 +202,14 @@ public class SftpUtil {
                         sftp.mkdir(tempPath);
                         sftp.cd(tempPath);
                     } catch (SftpException e2) {
-                        System.out.println("创建文件夹失败");
+                        log.error("创建文件夹失败");
                         throw new Exception(e2);
                     }
                 }
                 try {
                     sftp.cd(tempPath);
                 } catch (SftpException e1) {
-                    System.out.println("服务器异常 " + e1);
+                    log.error("服务器异常 " + e1);
                     throw new Exception(e1);
                 }
             }

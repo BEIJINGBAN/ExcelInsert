@@ -29,7 +29,7 @@ public class Audit321 {
 
         //文件地址
         String zipPath = "./src/";
-        String ExcelPath = "./src/main/resources/";
+        String ExcelPath = "./src/main/audit321/";
 
         //通知信息
         String interfaceVersion = "1.0";
@@ -68,7 +68,7 @@ public class Audit321 {
         test1.setCounterpartyAccount("");
         test1.setCounterpartyBank("");
         test1.setPurpose("日常收款");
-        test1.setAuditNotifyUrl("https://api.company.com/notify");
+        test1.setAuditNotifyUrl("http://localhost:9091/hello");
         test1.setDeliveryOrderFlag("1"); // 是发货订单
         test1.setConfirmReceiveTime(java.sql.Date.valueOf("2025-04-01")); // 假设已收货
         test1.setExtendInfo("{\"extend1\":\"手机\",\"extend2\":\"1\",\"extend3\":\"0.5\",\"extend5\":\"李四\"}");
@@ -89,7 +89,7 @@ public class Audit321 {
         test2.setCounterpartyAccount("");
         test2.setCounterpartyBank("");
         test2.setPurpose("日常收款");
-        test2.setAuditNotifyUrl("https://api.company.com/notify");
+        test2.setAuditNotifyUrl("http://localhost:9091/hello");
         test2.setDeliveryOrderFlag("0"); // 不是发货订单（如服务费）
         test2.setConfirmReceiveTime(null); // 非发货订单可为空
         test2.setExtendInfo("{\"extend1\":\"会员充值\",\"extend2\":\"1\",\"extend3\":\"11.11\",\"extend5\":\"王五\"}");
@@ -110,7 +110,7 @@ public class Audit321 {
         test3.setCounterpartyAccount("6222080200123456789");
         test3.setCounterpartyBank("中国工商银行");
         test3.setPurpose("退款");
-        test3.setAuditNotifyUrl("https://api.company.com/notify");
+        test3.setAuditNotifyUrl("http://localhost:9091/hello");
         test3.setDeliveryOrderFlag("0"); // 退款非发货订单
         test3.setConfirmReceiveTime(null);
         test3.setExtendInfo("{\"extend1\":\"退货订单\",\"extend2\":\"1\",\"extend5\":\"VIP客户\"}");

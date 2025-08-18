@@ -24,12 +24,12 @@ public class Audit327 {
 
         //文件地址
         String zipPath = "./src/";
-        String ExcelPath = "./src/main/resources/";
+        String ExcelPath = "./src/main/audit327/";
 
         //通知信息
         String interfaceVersion = "1.0";
         String transSeqNo = "NoABC";
-        String type = "1";
+        String type = "2";
 
         //应收上传
         String filePath = "";
@@ -68,7 +68,7 @@ public class Audit327 {
         test1.setChannelDiscount("1.00");
         test1.setCounterpartyAccountNew("alipay_user_123");
         test1.setCounterpartyNameNew("张三");
-        test1.setCallbackUrl("https://api.merchant.com/notify");
+        test1.setCallbackUrl("http://localhost:9091/hello");
 
         BillData splitPayment = new BillData();
         splitPayment.setOrgCode("ORG002");
@@ -93,7 +93,7 @@ public class Audit327 {
         splitPayment.setSplitFee("0.30");
         splitPayment.setCounterpartyAccountNew("unionpay_acct_456");
         splitPayment.setCounterpartyNameNew("李四超市");
-        splitPayment.setCallbackUrl("https://api.merchant.com/split-notify");
+        splitPayment.setCallbackUrl("http://localhost:9091/hello");
 
         BillData refundPayment = new BillData();
         refundPayment.setOrgCode("ORG001");
@@ -114,7 +114,7 @@ public class Audit327 {
         refundPayment.setSplitFlag("不分账");
         refundPayment.setCounterpartyAccountNew("alipay_user_123");
         refundPayment.setCounterpartyNameNew("张三");
-        refundPayment.setCallbackUrl("https://api.merchant.com/refund-notify");
+        refundPayment.setCallbackUrl("http://localhost:9091/hello");
 
         BillData wechatPayment = new BillData();
         wechatPayment.setOrgCode("ORG004");
@@ -137,7 +137,7 @@ public class Audit327 {
         wechatPayment.setChannelDiscount("0.00");
         wechatPayment.setCounterpartyAccountNew("wx_user_789");
         wechatPayment.setCounterpartyNameNew("王五");
-        wechatPayment.setCallbackUrl("https://api.merchant.com/wechat-notify");
+        wechatPayment.setCallbackUrl("http://localhost:9091/hello");
 
         // 添加到列表
         info.add(test1);
