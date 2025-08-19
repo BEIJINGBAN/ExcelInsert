@@ -68,7 +68,7 @@ public class Audit327 {
         test1.setChannelDiscount("1.00");
         test1.setCounterpartyAccountNew("alipay_user_123");
         test1.setCounterpartyNameNew("张三");
-        test1.setCallbackUrl("http://localhost:9091/hello");
+        test1.setCallbackUrl("http://10.60.45.65:9091/hello");
 
         BillData splitPayment = new BillData();
         splitPayment.setOrgCode("ORG002");
@@ -114,7 +114,7 @@ public class Audit327 {
         refundPayment.setSplitFlag("不分账");
         refundPayment.setCounterpartyAccountNew("alipay_user_123");
         refundPayment.setCounterpartyNameNew("张三");
-        refundPayment.setCallbackUrl("http://localhost:9091/hello");
+        refundPayment.setCallbackUrl("http://10.60.45.65:9091/hello");
 
         BillData wechatPayment = new BillData();
         wechatPayment.setOrgCode("ORG004");
@@ -137,7 +137,7 @@ public class Audit327 {
         wechatPayment.setChannelDiscount("0.00");
         wechatPayment.setCounterpartyAccountNew("wx_user_789");
         wechatPayment.setCounterpartyNameNew("王五");
-        wechatPayment.setCallbackUrl("http://localhost:9091/hello");
+        wechatPayment.setCallbackUrl("http://10.60.45.65:9091/hello");
 
         // 添加到列表
         info.add(test1);

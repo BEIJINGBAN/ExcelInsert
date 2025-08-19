@@ -47,6 +47,7 @@ public class Audit321 {
         ZipUtil zip = new ZipUtil();
         SftpUtil sftp = new SftpUtil();
         NoticeUtil notice = new NoticeUtil();
+        DateUtil date = new DateUtil();
         //测试数据
         Data test1 = new Data();
         Data test2 = new Data();
@@ -60,7 +61,7 @@ public class Audit321 {
         test1.setChannelSerialNo("WX202504050001");
         test1.setIncomeExpenseFlag("2"); // 收入
         test1.setAmount("100"); // 100分 = 1元
-        test1.setTradeTime(java.sql.Date.valueOf("2025-04-01"));
+        test1.setTradeTime(date.parseDate(("20250401")));
         test1.setOriginalTradeTime(null); // 可选，非现金上缴可为空
         test1.setEnterpriseCashieType("WECHAT_SCAN");
         test1.setRemark("门店扫码支付");
@@ -68,9 +69,9 @@ public class Audit321 {
         test1.setCounterpartyAccount("");
         test1.setCounterpartyBank("");
         test1.setPurpose("日常收款");
-        test1.setAuditNotifyUrl("http://localhost:9091/hello");
+        test1.setAuditNotifyUrl("http://10.60.45.65:9091/hello");
         test1.setDeliveryOrderFlag("1"); // 是发货订单
-        test1.setConfirmReceiveTime(java.sql.Date.valueOf("2025-04-01")); // 假设已收货
+        test1.setConfirmReceiveTime(date.parseDate(("20250401"))); // 假设已收货
         test1.setExtendInfo("{\"extend1\":\"手机\",\"extend2\":\"1\",\"extend3\":\"0.5\",\"extend5\":\"李四\"}");
 
         test2.setOrderOrgCode("ORG002");
@@ -81,7 +82,7 @@ public class Audit321 {
         test2.setChannelSerialNo("ALI202504050002");
         test2.setIncomeExpenseFlag("2"); // 收入
         test2.setAmount("111100"); // 111100分 = 1111.00元
-        test2.setTradeTime(java.sql.Date.valueOf("2025-04-01"));
+        test2.setTradeTime(date.parseDate(("20250401")));
         test2.setOriginalTradeTime(null);
         test2.setEnterpriseCashieType("ALIPAY_SCAN");
         test2.setRemark("支付宝门店收款");
@@ -89,7 +90,7 @@ public class Audit321 {
         test2.setCounterpartyAccount("");
         test2.setCounterpartyBank("");
         test2.setPurpose("日常收款");
-        test2.setAuditNotifyUrl("http://localhost:9091/hello");
+        test2.setAuditNotifyUrl("http://10.60.45.65:9091/hello");
         test2.setDeliveryOrderFlag("0"); // 不是发货订单（如服务费）
         test2.setConfirmReceiveTime(null); // 非发货订单可为空
         test2.setExtendInfo("{\"extend1\":\"会员充值\",\"extend2\":\"1\",\"extend3\":\"11.11\",\"extend5\":\"王五\"}");
@@ -102,15 +103,15 @@ public class Audit321 {
         test3.setChannelSerialNo("BANK20250405");
         test3.setIncomeExpenseFlag("1"); // 支出（退款）
         test3.setAmount("5000"); // 5000分 = 50元
-        test3.setTradeTime(java.sql.Date.valueOf("2025-04-01"));
-        test3.setOriginalTradeTime(java.sql.Date.valueOf("2025-04-01")); // 原交易日期
+        test3.setTradeTime(date.parseDate(("20250401")));
+        test3.setOriginalTradeTime(date.parseDate(("20250401"))); // 原交易日期
         test3.setEnterpriseCashieType("BANK_TRANSFER");
         test3.setRemark("客户退货退款");
         test3.setCounterpartyName("张三");
         test3.setCounterpartyAccount("6222080200123456789");
         test3.setCounterpartyBank("中国工商银行");
         test3.setPurpose("退款");
-        test3.setAuditNotifyUrl("http://localhost:9091/hello");
+        test3.setAuditNotifyUrl("http://10.60.45.65:9091/hello");
         test3.setDeliveryOrderFlag("0"); // 退款非发货订单
         test3.setConfirmReceiveTime(null);
         test3.setExtendInfo("{\"extend1\":\"退货订单\",\"extend2\":\"1\",\"extend5\":\"VIP客户\"}");
