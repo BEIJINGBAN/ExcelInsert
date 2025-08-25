@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Mapper.IShopMapper">
+<!--    <insert id="increaseShop">-->
+<!--        INSERT INTO mao_ren_shop_info (-->
+<!--        tenant_code, yqs_org_code, shop_code, shop_name,-->
+<!--        category_code, type_code, region_code, region_name,-->
+<!--        province_code, province_name, city_code, city_name,-->
+<!--        manage_mode, shop_channel_type, payment_mode, payment_cycle,-->
+<!--        profit_split_rate, extend_json_field, remark,-->
+<!--        is_active, version, creator, create_time, updater, update_time-->
+<!--        ) VALUES-->
+<!--        <foreach collection="list" item="item" separator=",">-->
+<!--            (-->
+<!--            #{item.tenantCode}, #{item.yqsOrgCode}, #{item.shopCode}, #{item.shopName},-->
+<!--            #{item.categoryCode}, #{item.typeCode}, #{item.regionCode}, #{item.regionName},-->
+<!--            #{item.provinceCode}, #{item.provinceName}, #{item.cityCode}, #{item.cityName},-->
+<!--            #{item.manageMode}, #{item.shopChannelType}, #{item.paymentMode}, #{item.paymentCycle},-->
+<!--            #{item.profitSplitRate}, #{item.extendJsonField}, #{item.remark},-->
+<!--            #{item.isActive}, #{item.version}, #{item.creator}, #{item.createTime}, #{item.updater}, #{item.updateTime}-->
+<!--            )-->
+<!--        </foreach>-->
+<!--    </insert>-->
+
+    <insert id="increaseShop" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO mao_ren_shop_info (
+        id,tenant_code, yqs_org_code, shop_code, shop_name,
+        category_code, type_code, region_code, region_name,
+        province_code, province_name, city_code, city_name,
+        manage_mode, shop_channel_type, payment_mode, payment_cycle,
+        profit_split_rate, extend_json_field, remark,
+        is_active, version, creator, create_time, updater, update_time
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.id},#{item.tenantCode}, #{item.yqsOrgCode}, #{item.shopCode}, #{item.shopName},
+            #{item.categoryCode}, #{item.typeCode}, #{item.regionCode}, #{item.regionName},
+            #{item.provinceCode}, #{item.provinceName}, #{item.cityCode}, #{item.cityName},
+            #{item.manageMode},#{item.shopChannelType} , #{item.paymentMode}, #{item.paymentCycle},
+            #{item.profitSplitRate}, #{item.extendJsonField}, #{item.remark},
+            1, #{item.version}, #{item.creator}, #{item.createTime}, #{item.updater}, #{item.updateTime}
+            )
+        </foreach>
+    </insert>
+    <select id="existsByYqsOrgCodeAndTenant" resultType="boolean">
+        SELECT EXISTS(
+            SELECT 1
+            FROM mao_ren_shop_info
+            WHERE yqs_org_code = #{yqsOrgCode}
+              AND tenant_code = #{tenantCode}
+        )
+    </select>
+</mapper>

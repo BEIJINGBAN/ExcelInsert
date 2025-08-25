@@ -1,433 +1,537 @@
-package Data;
-
-
-import java.io.Serializable;
+package Domain;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.format.DateTimeFormat;
+import java.io.Serializable;
 
+/**
+ * 猫人-店铺信息扩展表
+ */
 public class ShopExtend implements Serializable {
 
-        private static final long serialVersionUID = 1L;
 
         /**
-         * 主键ID
+         * 主键
          */
+        @ExcelProperty("主键")
         private Long id;
 
         /**
-         * 租户编码
+         * 企业编码
          */
+        @ExcelProperty("企业编码")
         private String tenantCode;
 
         /**
-         * 门店编码
+         * 店铺代码（关联主表）
          */
+        @ExcelProperty("店铺代码")
         private String shopCode;
 
         /**
-         * 品牌类型
+         * 品牌（字典：BrandTypeEnum）
          */
+        @ExcelProperty("品牌")
         private String brandType;
 
         /**
-         * 账本类型
+         * 账套（字典：LedgerTypeEnum）
          */
+        @ExcelProperty("账套")
         private String ledgerType;
 
         /**
-         * 租赁类型
+         * 租赁类型（字典：LeaseTypeEnum）
          */
+        @ExcelProperty("租赁类型")
         private String leaseType;
 
         /**
-         * 渠道销售位置类型
+         * 渠道定位（字典：ChannelSalesPositionTypeEnum）
          */
+        @ExcelProperty("渠道定位")
         private String channelSalesPositionType;
 
         /**
-         * 商场类型
+         * 商场体系（字典：MallTypeEnum）
          */
+        @ExcelProperty("商场体系")
         private String mallType;
 
         /**
-         * 一级区域类型
+         * 一级大区（字典：FirstLevelRegionTypeEnum）
          */
+        @ExcelProperty("一级大区")
         private String firstLevelRegionType;
 
         /**
-         * 二级区域类型
+         * 二级大区（字典：SecondLevelRegionTypeEnum）
          */
+        @ExcelProperty("二级大区")
         private String secondLevelRegionType;
 
         /**
-         * 城市等级
+         * 城市级别（字典：CityLevelEnum）
          */
+        @ExcelProperty("城市级别")
         private String cityLevel;
 
         /**
-         * 区域负责人
+         * 大区负责人
          */
+        @ExcelProperty("大区负责人")
         private String regionLeader;
 
         /**
          * 运营负责人
          */
+        @ExcelProperty("运营负责人")
         private String operationLeader;
 
         /**
-         * 运营负责人员工ID
+         * 运营负责人工号，推送易快报需要
          */
+        //TODO 没有
+        @ExcelProperty("运营负责人工号")
         private String operationLeaderEmployeeId;
 
         /**
          * 商品负责人
          */
+        @ExcelProperty("商品负责人")
         private String productLeader;
 
         /**
-         * 证件号码
+         * 证件号码，统一社会信用代码/身份证号，推送蓝凌合同系统需要传到相对方ID
          */
+        //TODO 没有
+        @ExcelProperty("证件号码")
         private String certNum;
 
         /**
-         * 门店形象类型
+         * 店铺形象（字典：ShopImageTypeEnum）
          */
+        @ExcelProperty("店铺形象")
         private String shopImageType;
 
         /**
-         * 门店等级
+         * 店铺等级
          */
+        @ExcelProperty("店铺等级")
         private String shopGrade;
 
         /**
          * 开业时间
          */
+        @ExcelProperty("开业时间")
+        @DateTimeFormat("yyyy-MM-dd HH:mm:ss")
         private LocalDateTime openTime;
 
         /**
-         * 关店时间
+         * 关闭时间
          */
+        @ExcelProperty("关闭时间")
+        @DateTimeFormat("yyyy-MM-dd HH:mm:ss")
         private LocalDateTime closeTime;
 
         /**
-         * 门店扩展类型
+         * 拓展类型（字典：ShopExtensionTypeEnum）
          */
+        @ExcelProperty("拓展类型")
         private String shopExtensionType;
 
         /**
          * 楼层
          */
+        @ExcelProperty("楼层")
         private String floor;
 
         /**
-         * 位置
+         * 店铺位置
          */
+        @ExcelProperty("店铺位置")
         private String position;
 
         /**
-         * 总面积
+         * 总面积（㎡）
          */
+        @ExcelProperty("总面积")
         private BigDecimal totalArea;
 
         /**
-         * 销售面积
+         * 卖场面积（㎡）
          */
+        @ExcelProperty("卖场面积")
         private BigDecimal salesArea;
 
         /**
-         * 仓库面积
+         * 仓库面积（㎡）
          */
+        @ExcelProperty("仓库面积")
         private BigDecimal warehouseArea;
 
         /**
          * 员工人数
          */
+        @ExcelProperty("员工人数")
         private Integer staffNum;
 
         /**
-         * 增值税率
+         * 增值税税率（%），只允许输入＞0的整数
          */
-        private BigDecimal vatRate;
+        @ExcelProperty("增值税税率")
+        private Integer vatRate;
 
         /**
-         * 月租金金额
+         * 月租金（元）
          */
+        @ExcelProperty("月租金")
         private BigDecimal monthlyRentAmount;
 
         /**
-         * 月物业费金额
+         * 月物业费（元）
          */
+        @ExcelProperty("月物业费")
         private BigDecimal monthlyPropertyAmount;
 
         /**
-         * 合同扣点率
+         * 合同扣率（%），保留2位小数
          */
+        @ExcelProperty("合同扣率")
         private BigDecimal contractDeductionRate;
 
         /**
-         * 加盟商利润分成率
+         * 加盟商分利比（%），保留2位小数
          */
+        @ExcelProperty("加盟商分利比")
         private BigDecimal franchiseeProfitSplitRate;
 
         /**
-         * O2O技术服务费率
+         * O2O技术服务费承担比，单位：％，只允许输入【0,100】的整数。联营专用，渠道为联营必填
          */
-        private BigDecimal o2oTechnicalServiceFeeRate;
+        @ExcelProperty("O2O技术服务费承担比（%）")
+        private Integer o2oTechnicalServiceFeeRate;
 
         /**
-         * O2O运营服务费率
+         * O2O代运营服务费承担比，单位：％，只允许输入【0,100】的整数。联营专用，渠道为联营必填
          */
-        private BigDecimal o2oOperationServiceFeeRate;
+        @ExcelProperty("O2O代运营服务费承担比（%）")
+        private Integer o2oOperationServiceFeeRate;
 
         /**
-         * 水电费金额
+         * 水电费（元）
          */
+        @ExcelProperty("水电费")
         private BigDecimal waterElectricityAmount;
 
         /**
-         * 商场固定成本金额
+         * 商场固定费用（元）
          */
+        @ExcelProperty("商场固定费用")
         private BigDecimal mallFixedCostAmount;
 
         /**
-         * 其他固定成本金额
+         * 其他固定费用（元）
          */
+        @ExcelProperty("其他固定费用")
         private BigDecimal otherFixedCostAmount;
 
         /**
-         * 商场浮动成本金额
+         * 商场浮动费用（元）
          */
+        @ExcelProperty("商场浮动费用")
         private BigDecimal mallFloatCostAmount;
 
         /**
-         * 保底销售额
+         * 保底销售流水（元）
          */
+        @ExcelProperty("保底销售流水")
         private BigDecimal guaranteeSalesAmount;
 
         /**
-         * 保底周期
+         * 保底期间要求（字典：GuaranteePeriodEnum）
          */
+        @ExcelProperty("保底期间要求")
         private String guaranteePeriod;
 
         /**
-         * 首年保底销售额
+         * 报店第一年目标（元）
          */
+        @ExcelProperty("报店第一年目标")
         private BigDecimal guaranteeFirstYearSalesAmount;
 
         /**
          * 改造类型
          */
+        @ExcelProperty("改造类型")
         private String transformType;
 
         /**
          * 上次改造时间
          */
+        @ExcelProperty("上次改造时间")
+        @DateTimeFormat("yyyy-MM-dd HH:mm:ss")
         private LocalDateTime lastTransformTime;
 
         /**
          * 改造开始时间
          */
+        @ExcelProperty("改造开始时间")
+        @DateTimeFormat("yyyy-MM-dd HH:mm:ss")
         private LocalDateTime transformStartTime;
 
         /**
          * 改造结束时间
          */
+        @ExcelProperty("改造结束时间")
+        @DateTimeFormat("yyyy-MM-dd HH:mm:ss")
         private LocalDateTime transformEndTime;
 
         /**
          * 改造周期
          */
+        @ExcelProperty("改造周期")
         private String transformPeriod;
 
         /**
-         * 改造总面积
+         * 改造后总面积（㎡）
          */
+        @ExcelProperty("改造后总面积")
         private BigDecimal transformTotalArea;
 
         /**
-         * 改造销售面积
+         * 改造后卖场面积（㎡）
          */
+        @ExcelProperty("改造后卖场面积")
         private BigDecimal transformSalesArea;
 
         /**
-         * 改造仓库面积
+         * 改造后仓库面积（㎡）
          */
+        @ExcelProperty("改造后仓库面积")
         private BigDecimal transformWarehouseArea;
 
         /**
-         * 新店基础分摊金额
+         * 新店基装摊销（元）
          */
+        @ExcelProperty("新店基装摊销")
         private BigDecimal newStoreBaseInstallmentAmount;
 
         /**
-         * 新店物业分摊金额
+         * 新店道具摊销（元）
          */
+        @ExcelProperty("新店道具摊销")
         private BigDecimal newStorePropInstallmentAmount;
 
         /**
-         * 新店市场拓展金额
+         * 新店市场拓展费（元）
          */
+        @ExcelProperty("新店市场拓展费")
         private BigDecimal newStoreMarketExpansionAmount;
 
         /**
-         * 新店卡费金额
+         * 新店刷卡手续费（元）
          */
+        @ExcelProperty("新店刷卡手续费")
         private BigDecimal newStoreCardFeeAmount;
 
         /**
-         * 新店物流金额
+         * 新店物流费（元）
          */
+        @ExcelProperty("新店物流费")
         private BigDecimal newStoreLogisticsAmount;
 
         /**
-         * 新店其他金额
+         * 新店其他费用（元）
          */
+        @ExcelProperty("新店其他费用")
         private BigDecimal newStoreOtherAmount;
 
         /**
          * 加盟商名称
          */
+        @ExcelProperty("加盟商名称")
         private String franchiseeName;
 
         /**
-         * 加盟商账号
+         * 加盟商账户，推送易快报需要
          */
+        //TODO 没有
+        @ExcelProperty("加盟商账户")
         private String franchiseeAccountNo;
 
         /**
-         * 加盟主合同ID
+         * 主合同编号
          */
-        private Long fdMainContractId;
+        //TODO 没有
+        @ExcelProperty("主合同编号")
+        private String fdMainContractId;
 
         /**
-         * 加盟商扣点率
+         * 降扣比例（%），只允许输入＞0的整数
          */
-        private BigDecimal franchiseeDeductionRate;
+        @ExcelProperty("降扣比例")
+        private Integer franchiseeDeductionRate;
 
         /**
          * 合同开始时间
          */
+        //TODO  没用到
+        @ExcelProperty("合同开始时间")
+        @DateTimeFormat("yyyy-MM-dd HH:mm:ss")
         private LocalDateTime contractStartTime;
 
         /**
          * 合同结束时间
          */
+        // TODO 没用到
+        @ExcelProperty("合同结束时间")
+        @DateTimeFormat("yyyy-MM-dd HH:mm:ss")
         private LocalDateTime contractEndTime;
 
         /**
-         * 合同期限(月)
+         * 合同周期月
          */
-        private Integer contractPeriodMonth;
+        @ExcelProperty("合同周期月")
+        private String contractPeriodMonth;
 
         /**
-         * 结算方式
+         * 收银方式（字典：CheckoutMethodEnum）
          */
+        @ExcelProperty("收银方式")
         private String checkoutMethod;
 
         /**
-         * 用友部门编码
+         * 用友部门代码
          */
+        @ExcelProperty("用友部门代码")
         private String yonyouDepartmentCode;
 
         /**
          * 用友部门名称
          */
+        @ExcelProperty("用友部门名称")
         private String yonyouDepartmentName;
 
         /**
-         * 用友商场编码
+         * 用友商场代码
          */
+        @ExcelProperty("用友商场代码")
         private String yonyouMallCode;
 
         /**
          * 用友商场名称
          */
+        @ExcelProperty("用友商场名称")
         private String yonyouMallName;
 
         /**
-         * 用友加盟商编码
+         * 用友加盟商代码
          */
+        @ExcelProperty("用友加盟商代码")
         private String yonyouFranchiseeCode;
 
         /**
          * 用友加盟商名称
          */
+        @ExcelProperty("用友加盟商名称")
         private String yonyouFranchiseeName;
 
         /**
-         * 用友公司编码
+         * 用友公司代码
          */
+        @ExcelProperty("用友公司代码")
         private String yonyouCompanyCode;
 
         /**
          * 用友公司名称
          */
+        @ExcelProperty("用友公司名称")
         private String yonyouCompanyName;
 
         /**
-         * 用友直播业务门店类型编码
+         * 用友直播业务/店铺类型代码
          */
+        @ExcelProperty("用友直播业务/店铺类型代码")
         private String yonyouLiveBusinessShopTypeCode;
 
         /**
-         * 用友直播业务门店类型名称
+         * 用友直播业务/店铺类型名称
          */
+        @ExcelProperty("用友直播业务/店铺类型名称")
         private String yonyouLiveBusinessShopTypeName;
 
         /**
          * 用友财务负责人手机号
          */
+        @ExcelProperty("用友财务负责人手机号")
         private String yonyouFinancialLeaderMobile;
 
         /**
-         * 用友总部公司编码
+         * 用友总公司
          */
+        @ExcelProperty("用友总公司")
         private String yonyouHeadCompanyCode;
 
         /**
-         * 用友分支机构公司编码
+         * 用友分公司
          */
+        @ExcelProperty("用友分公司")
         private String yonyouBranchCompanyCode;
 
         /**
          * 用友制单人
          */
+        @ExcelProperty("用友制单人")
         private String yonyouPreparer;
 
         /**
          * 备注
          */
+        @ExcelProperty("备注")
         private String remark;
 
         /**
-         * 是否激活 (1: 是, 0: 否)
+         * 有效状态(1-有效; 0-无效)
          */
-        private Integer isActive;
+        //TODO 没有
+        @ExcelProperty("有效状态")
+        private String isActive;
 
         /**
-         * 版本号
+         * 数据版本号
          */
+        //TODO 没有
+        @ExcelProperty("数据版本号")
         private Integer version;
 
         /**
-         * 创建人
+         * 创建者
          */
-        private String creator;
+        @ExcelProperty("创建者")
+        private Long creator;
 
         /**
          * 创建时间
          */
+        @ExcelProperty("创建时间")
+        @DateTimeFormat("yyyy-MM-dd HH:mm:ss")
         private LocalDateTime createTime;
 
         /**
-         * 更新人
+         * 更新者
          */
-        private String updater;
+        @ExcelProperty("更新者")
+        private Long updater;
 
         /**
          * 更新时间
          */
+        @ExcelProperty("更新时间")
+        @DateTimeFormat("yyyy-MM-dd HH:mm:ss")
         private LocalDateTime updateTime;
+
 
 
         public Long getId() {
@@ -646,13 +750,6 @@ public class ShopExtend implements Serializable {
             this.staffNum = staffNum;
         }
 
-        public BigDecimal getVatRate() {
-            return vatRate;
-        }
-
-        public void setVatRate(BigDecimal vatRate) {
-            this.vatRate = vatRate;
-        }
 
         public BigDecimal getMonthlyRentAmount() {
             return monthlyRentAmount;
@@ -686,21 +783,7 @@ public class ShopExtend implements Serializable {
             this.franchiseeProfitSplitRate = franchiseeProfitSplitRate;
         }
 
-        public BigDecimal getO2oTechnicalServiceFeeRate() {
-            return o2oTechnicalServiceFeeRate;
-        }
 
-        public void setO2oTechnicalServiceFeeRate(BigDecimal o2oTechnicalServiceFeeRate) {
-            this.o2oTechnicalServiceFeeRate = o2oTechnicalServiceFeeRate;
-        }
-
-        public BigDecimal getO2oOperationServiceFeeRate() {
-            return o2oOperationServiceFeeRate;
-        }
-
-        public void setO2oOperationServiceFeeRate(BigDecimal o2oOperationServiceFeeRate) {
-            this.o2oOperationServiceFeeRate = o2oOperationServiceFeeRate;
-        }
 
         public BigDecimal getWaterElectricityAmount() {
             return waterElectricityAmount;
@@ -886,21 +969,7 @@ public class ShopExtend implements Serializable {
             this.franchiseeAccountNo = franchiseeAccountNo;
         }
 
-        public Long getFdMainContractId() {
-            return fdMainContractId;
-        }
 
-        public void setFdMainContractId(Long fdMainContractId) {
-            this.fdMainContractId = fdMainContractId;
-        }
-
-        public BigDecimal getFranchiseeDeductionRate() {
-            return franchiseeDeductionRate;
-        }
-
-        public void setFranchiseeDeductionRate(BigDecimal franchiseeDeductionRate) {
-            this.franchiseeDeductionRate = franchiseeDeductionRate;
-        }
 
         public LocalDateTime getContractStartTime() {
             return contractStartTime;
@@ -918,13 +987,7 @@ public class ShopExtend implements Serializable {
             this.contractEndTime = contractEndTime;
         }
 
-        public Integer getContractPeriodMonth() {
-            return contractPeriodMonth;
-        }
 
-        public void setContractPeriodMonth(Integer contractPeriodMonth) {
-            this.contractPeriodMonth = contractPeriodMonth;
-        }
 
         public String getCheckoutMethod() {
             return checkoutMethod;
@@ -1054,13 +1117,7 @@ public class ShopExtend implements Serializable {
             this.remark = remark;
         }
 
-        public Integer getIsActive() {
-            return isActive;
-        }
 
-        public void setIsActive(Integer isActive) {
-            this.isActive = isActive;
-        }
 
         public Integer getVersion() {
             return version;
@@ -1070,13 +1127,9 @@ public class ShopExtend implements Serializable {
             this.version = version;
         }
 
-        public String getCreator() {
-            return creator;
-        }
 
-        public void setCreator(String creator) {
-            this.creator = creator;
-        }
+
+
 
         public LocalDateTime getCreateTime() {
             return createTime;
@@ -1086,12 +1139,77 @@ public class ShopExtend implements Serializable {
             this.createTime = createTime;
         }
 
-        public String getUpdater() {
-            return updater;
+
+        public Integer getVatRate() {
+                return vatRate;
         }
 
-        public void setUpdater(String updater) {
-            this.updater = updater;
+        public void setVatRate(Integer vatRate) {
+                this.vatRate = vatRate;
+        }
+
+        public Integer getO2oTechnicalServiceFeeRate() {
+                return o2oTechnicalServiceFeeRate;
+        }
+
+        public void setO2oTechnicalServiceFeeRate(Integer o2oTechnicalServiceFeeRate) {
+                this.o2oTechnicalServiceFeeRate = o2oTechnicalServiceFeeRate;
+        }
+
+        public Integer getO2oOperationServiceFeeRate() {
+                return o2oOperationServiceFeeRate;
+        }
+
+        public void setO2oOperationServiceFeeRate(Integer o2oOperationServiceFeeRate) {
+                this.o2oOperationServiceFeeRate = o2oOperationServiceFeeRate;
+        }
+
+        public String getFdMainContractId() {
+                return fdMainContractId;
+        }
+
+        public void setFdMainContractId(String fdMainContractId) {
+                this.fdMainContractId = fdMainContractId;
+        }
+
+        public Integer getFranchiseeDeductionRate() {
+                return franchiseeDeductionRate;
+        }
+
+        public void setFranchiseeDeductionRate(Integer franchiseeDeductionRate) {
+                this.franchiseeDeductionRate = franchiseeDeductionRate;
+        }
+
+        public String getContractPeriodMonth() {
+                return contractPeriodMonth;
+        }
+
+        public void setContractPeriodMonth(String contractPeriodMonth) {
+                this.contractPeriodMonth = contractPeriodMonth;
+        }
+
+        public String getIsActive() {
+                return isActive;
+        }
+
+        public void setIsActive(String isActive) {
+                this.isActive = isActive;
+        }
+
+        public Long getCreator() {
+                return creator;
+        }
+
+        public void setCreator(Long creator) {
+                this.creator = creator;
+        }
+
+        public Long getUpdater() {
+                return updater;
+        }
+
+        public void setUpdater(Long updater) {
+                this.updater = updater;
         }
 
         public LocalDateTime getUpdateTime() {

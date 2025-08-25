@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Mapper.IOrganization">
+
+    <insert id="increaseOrganizaton" parameterType="java.util.List">
+        INSERT INTO organization (
+        id, tenant_code, org_code, org_name, parent_org_code,
+        short_org_name, org_type, org_level, org_path,
+        data_source, status, remark, version,
+        creator, updater, create_time, update_time,
+        is_delete, `extend`
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.id}, #{item.tenantCode}, #{item.orgCode}, #{item.orgName}, #{item.parentOrgCode},
+            #{item.shortOrgName}, #{item.orgType}, #{item.orgLevel}, #{item.orgPath},
+            #{item.dataSource}, #{item.status}, #{item.remark}, #{item.version},
+            #{item.creator}, #{item.updater}, #{item.createTime}, #{item.updateTime},
+            #{item.isDelete}, #{item.extend}
+            )
+        </foreach>
+    </insert>
+</mapper>

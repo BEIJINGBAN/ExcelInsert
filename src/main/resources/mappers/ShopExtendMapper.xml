@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Mapper.IShopExtendMapper">
+
+    <insert id="increaseShopExtend">
+        INSERT INTO mao_ren_shop_info_extend (
+        id, tenant_code, shop_code, brand_type, ledger_type, lease_type,
+        channel_sales_position_type, mall_type, first_level_region_type, second_level_region_type,
+        city_level, region_leader, operation_leader, operation_leader_employee_id, product_leader,
+        cert_num, shop_image_type, shop_grade, open_time, close_time,
+        shop_extension_type, floor, position, total_area, sales_area,
+        warehouse_area, staff_num, vat_rate, monthly_rent_amount, monthly_property_amount,
+        contract_deduction_rate, franchisee_profit_split_rate, o2o_technical_service_fee_rate,
+        o2o_operation_service_fee_rate, water_electricity_amount, mall_fixed_cost_amount,
+        other_fixed_cost_amount, mall_float_cost_amount, guarantee_sales_amount, guarantee_period,
+        guarantee_first_year_sales_amount, transform_type, last_transform_time, transform_start_time,
+        transform_end_time, transform_period, transform_total_area, transform_sales_area,
+        transform_warehouse_area, new_store_base_installment_amount, new_store_prop_installment_amount,
+        new_store_market_expansion_amount, new_store_card_fee_amount, new_store_logistics_amount,
+        new_store_other_amount, franchisee_name, franchisee_account_no, fd_main_contract_id,
+        franchisee_deduction_rate, contract_start_time, contract_end_time, contract_period_month,
+        checkout_method, yonyou_department_code, yonyou_department_name, yonyou_mall_code,
+        yonyou_mall_name, yonyou_franchisee_code, yonyou_franchisee_name, yonyou_company_code,
+        yonyou_company_name, yonyou_live_business_shop_type_code, yonyou_live_business_shop_type_name,
+        yonyou_financial_leader_mobile, yonyou_head_company_code, yonyou_branch_company_code,
+        yonyou_preparer, remark, is_active, version, creator, create_time, updater, update_time
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.id},#{item.tenantCode}, #{item.shopCode}, #{item.brandType}, #{item.ledgerType}, #{item.leaseType},
+            #{item.channelSalesPositionType}, #{item.mallType}, #{item.firstLevelRegionType}, #{item.secondLevelRegionType},
+            #{item.cityLevel}, #{item.regionLeader}, #{item.operationLeader}, #{item.operationLeaderEmployeeId}, #{item.productLeader},
+            #{item.certNum}, #{item.shopImageType}, #{item.shopGrade}, #{item.openTime}, #{item.closeTime},
+            #{item.shopExtensionType}, #{item.floor}, #{item.position}, #{item.totalArea}, #{item.salesArea},
+            #{item.warehouseArea}, #{item.staffNum}, #{item.vatRate}, #{item.monthlyRentAmount}, #{item.monthlyPropertyAmount},
+            #{item.contractDeductionRate}, #{item.franchiseeProfitSplitRate}, #{item.o2oTechnicalServiceFeeRate},
+            #{item.o2oOperationServiceFeeRate}, #{item.waterElectricityAmount}, #{item.mallFixedCostAmount},
+            #{item.otherFixedCostAmount}, #{item.mallFloatCostAmount}, #{item.guaranteeSalesAmount}, #{item.guaranteePeriod},
+            #{item.guaranteeFirstYearSalesAmount}, #{item.transformType}, #{item.lastTransformTime}, #{item.transformStartTime},
+            #{item.transformEndTime}, #{item.transformPeriod}, #{item.transformTotalArea}, #{item.transformSalesArea},
+            #{item.transformWarehouseArea}, #{item.newStoreBaseInstallmentAmount}, #{item.newStorePropInstallmentAmount},
+            #{item.newStoreMarketExpansionAmount}, #{item.newStoreCardFeeAmount}, #{item.newStoreLogisticsAmount},
+            #{item.newStoreOtherAmount}, #{item.franchiseeName}, #{item.franchiseeAccountNo}, #{item.fdMainContractId},
+            #{item.franchiseeDeductionRate}, #{item.contractStartTime}, #{item.contractEndTime}, #{item.contractPeriodMonth},
+            #{item.checkoutMethod}, #{item.yonyouDepartmentCode}, #{item.yonyouDepartmentName}, #{item.yonyouMallCode},
+            #{item.yonyouMallName}, #{item.yonyouFranchiseeCode}, #{item.yonyouFranchiseeName}, #{item.yonyouCompanyCode},
+            #{item.yonyouCompanyName}, #{item.yonyouLiveBusinessShopTypeCode}, #{item.yonyouLiveBusinessShopTypeName},
+            #{item.yonyouFinancialLeaderMobile}, #{item.yonyouHeadCompanyCode}, #{item.yonyouBranchCompanyCode},
+            #{item.yonyouPreparer}, #{item.remark}, #{item.isActive}, #{item.version}, #{item.creator}, #{item.createTime},
+            #{item.updater}, #{item.updateTime}
+            )
+        </foreach>
+    </insert>
+</mapper>

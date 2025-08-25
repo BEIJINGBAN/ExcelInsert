@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!-- 开启日志 -->
+    <settings>
+        <setting name="logImpl" value="SLF4J"/>
+    </settings>
+
+    <!-- 环境配置：开发环境 -->
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+<!--                    测试环境-->
+                <!--                <property name="url" value="jdbc:mysql://172.18.13.149:3308/yqs_audit_3_0_mr184301?serverTimezone=GMT%2B8&amp;setUnicode=true&amp;characterEncoding=utf8&amp;allowMultiQueries=true"/>-->
+<!--                <property name="username" value="admin"/>-->
+<!--                <property name="password" value="123@fingard.RH@456"/>-->
+
+                <!--                    本地环境-->
+<!--                <property name="url" value="jdbc:mysql://localhost:3306/test?useSSL=false&amp;serverTimezone=UTC"/>-->
+<!--                <property name="username" value="root"/>-->
+<!--                <property name="password" value="root"/>-->
+
+
+<!--                生产环境-->
+                <property name="url" value="jdbc:mysql://172.18.13.96:3306/yqs_base_yqspay_3_0_maoren_dev?useSSL=false&amp;serverTimezone=UTC"/>
+                <property name="username" value="root"/>
+                <property name="password" value="root"/>
+
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!-- 注册 Mapper 文件 -->
+    <mappers>
+        <mapper resource="mappers/ShopExtendMapper.xml"/>
+        <mapper resource="mappers/ShopMapper.xml"/>
+        <mapper resource="mappers/ShopMapper.xml"/>
+    </mappers>
+
+</configuration>
