@@ -15,8 +15,15 @@
     </Appenders>
 
     <Loggers>
+        <Logger name="com.baomidou.mybatisplus" level="info" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <Logger name="org.apache.ibatis" level="info" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
         <!-- 设置你的包日志级别 -->
-        <Logger name="Util" level="debug" additivity="false">
+        <Logger name="Util" level="info" additivity="false">
             <AppenderRef ref="Console"/>
             <!-- <AppenderRef ref="File"/> -->
         </Logger>

@@ -407,11 +407,8 @@ public interface ShopImportMapper {
         if (source == null) {
             return "00";
         }
-
-        // 将 BigDecimal 转为 百分比整数（如 0.03 -> 3）
         int rate = source.multiply(BigDecimal.valueOf(100)).intValue();
 
-        // 格式化为两位字符串，不足两位前面补0
         return String.format("%02d", rate);
     }
     @Named("mapMallType")
@@ -492,6 +489,43 @@ public interface ShopImportMapper {
                 return "00";
         }
     }
+    @Named("mapShopChannelType")
+    default String ShopChannelTypeEnum(String source) {
+        if (source == null) {
+            return "00"; // 默认返回“00”
+        }
+        // 预处理字符串：移除首尾空格，以确保精确匹配
+        String trimmedSource = source.trim();
+
+        switch (trimmedSource) {
+            case "直营":
+                return "01";
+            case "商超":
+                return "02";
+            case "联营":
+                return "03";
+            case "加盟":
+                return "04";
+            default:
+                // 如果所有 case 都不匹配，返回默认值
+                return "00";
+        }
+    }
+    @Named("mapManageModeRate")
+    default String mapManageMode(String source) {
+        if (source == null) {
+            return "00";
+        }
+        String trimmedSource = source.trim();
+        switch (trimmedSource) {
+            case "总公司":
+                return "01";
+            case "分公司":
+                    return "02";
+            default:
+                return "00";
+        }
+    }
     @Mappings({
             @Mapping(target = "id", expression = "java(com.baomidou.mybatisplus.core.toolkit.IdWorker.getId())"),
             @Mapping(source = "shopCode", target = "shopCode"),
@@ -502,13 +536,13 @@ public interface ShopImportMapper {
             @Mapping(source = "regionName", target = "regionName"),
             @Mapping(source = "provinceCode", target = "provinceCode"),
             @Mapping(source = "provinceName", target = "provinceName"),
-            @Mapping(source = "cityCode", target = "cityCode"),
+            @Mapping(source = "cityCode", target = "cityCode",qualifiedByName = "mapCityLevel"),
             @Mapping(source = "cityName", target = "cityName"),
 
 
-            @Mapping(target = "manageMode", expression = "java(dto.getManageMode() != null && dto.getManageMode().equals(\"分公司\") ? \"01\" : \"02\")"),
+            @Mapping(source = "manageMode", target = "manageMode", qualifiedByName = "mapManageModeRate"),
 
-            @Mapping(target = "shopChannelType", constant = "0"),
+            @Mapping(source = "shopChannelType", target = "shopChannelType",qualifiedByName = "mapShopChannelType"),
 
             @Mapping(source = "paymentMode", target = "paymentMode"),
 

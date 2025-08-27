@@ -14,15 +14,12 @@ public class MyBatisUtil {
 
     static {
         try {
-            // 定义 MyBatis 配置文件的位置
+
             String resource = "mybatis-config.xml";
-            // 将配置文件加载为输入流
             InputStream inputStream = Resources.getResourceAsStream(resource);
-            // 通过 SqlSessionFactoryBuilder 构建 SqlSessionFactory
             sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
         } catch (IOException e) {
             e.printStackTrace();
-            // 在实际项目中，你可能需要更健壮的异常处理
         }
     }
 
