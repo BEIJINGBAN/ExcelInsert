@@ -60,11 +60,13 @@ public class Update {
             List<ShopExcelDTO> finalList = new ArrayList<>();
             List<ShopExcelDTO> abandonList = new ArrayList<>();
 
-            finalList = middleList.stream()
-                    .limit(5)
-                    .collect(Collectors.toList());
-      //      finalList.addAll(middleList);
+            int limit = 5;
 
+            List<ShopExcelDTO> datas = middleList.stream()
+                    .limit(limit)
+                    .collect(Collectors.toList());
+
+            finalList.addAll(datas);
 
 //        for (Map.Entry<String,List<ShopExcelDTO>> entry: middleMap.entrySet()) {
 //            String shopCode = entry.getKey();

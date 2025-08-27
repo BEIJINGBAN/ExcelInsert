@@ -51,14 +51,16 @@ public class Exit {
             log.info("接收成功，共接收 {} 条数据", middleList.size());
 //          测试数据库中是否存在数据
 
-            int limit = 5;
+
 
 //            Map<String, List<ShopExcelDTO>> middleMap = middleList.stream()
 //                    .filter(dto -> dto.getShopCode() != null && !dto.getShopCode().isEmpty())
 //                    .collect(Collectors.groupingBy(ShopExcelDTO::getShopCode));
+
             List<ShopExcelDTO> finalList = new ArrayList<>();
             List<ShopExcelDTO> abandonList = new ArrayList<>();
 
+            int limit = 5;
             List<ShopExcelDTO> datas = middleList.stream()
                     .limit(limit)
                     .collect(Collectors.toList());
@@ -123,8 +125,8 @@ public class Exit {
                         log.info("可以插入");
                     }
                 }
-                log.info(" 查询 {} 条 Shop_info表已存在 "+j+" 条数据",limit);
-                log.info(" 查询 {} 条 Shop_info_extend表已存在 "+k+" 条数据",limit);
+                log.info(" 查询 {} 条数据 Shop_info表已存在 "+j+" 条数据",limit);
+                log.info(" 查询 {} 条数据 Shop_info_extend表已存在 "+k+" 条数据",limit);
             }catch (Exception e){
                 log.error(e.getMessage());
             }
