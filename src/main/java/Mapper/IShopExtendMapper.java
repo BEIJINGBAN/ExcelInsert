@@ -10,7 +10,7 @@ import java.util.List;
 public interface IShopExtendMapper {
     Boolean increaseShopExtend(@Param("list") List<ShopExtend> shopExtendsList);
 
-    boolean existsByShopCodeAndTenant(@Param("list") List<ShopExtend> shopExtendsList);;
+    boolean existsByShopCodeAndTenant(String shopExtendsList);;
 
     void updateShopExtend(ShopExtend shopExtend);
 }

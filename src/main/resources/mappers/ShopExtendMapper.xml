@@ -59,7 +59,6 @@
             SELECT 1
             FROM mao_ren_shop_info_extend
             WHERE shop_code = #{shopCode}
-              AND tenant_code = #{tenantCode}
         )
     </select>
 

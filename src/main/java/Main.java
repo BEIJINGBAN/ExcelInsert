@@ -1,4 +1,5 @@
 
+import Util.Exit;
 import Util.Inseart;
 import Util.Update;
 import org.apache.logging.log4j.LogManager;
@@ -16,6 +17,7 @@ public class Main {
        // String localUrl ="D:/anyCode/java/Audit_Once/ExcelInsert/src/main/test/NEW_门店资料_ 副本.xlsx";
         String localUrl ="D:/anyCode/java/Audit_Once/ExcelInsert/src/main/test/直营门店资料 - 副本.xlsx";
        // Inseart.inseart(localUrl);
-        Update.update(localUrl);
+        // Update.update(localUrl);
+        Exit.select(localUrl);
     }
 }
