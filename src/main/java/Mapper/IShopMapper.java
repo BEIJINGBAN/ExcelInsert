@@ -11,4 +11,5 @@ public interface IShopMapper {
 
     Boolean existsByYqsOrgCodeAndTenant(@Param("yqsOrgCode") String yqsOrgCode,
                                         @Param("tenantCode") String tenantCode);
+    void updateShop(Shop shopList);
 }

@@ -44,6 +44,7 @@
             )
         </foreach>
     </insert>
+
     <select id="existsByYqsOrgCodeAndTenant" resultType="boolean">
         SELECT EXISTS(
             SELECT 1
@@ -52,4 +53,36 @@
               AND tenant_code = #{tenantCode}
         )
     </select>
+
+    <update id="updateShop" parameterType="Domain.Shop">
+            UPDATE mao_ren_shop_info
+            SET
+            shop_code = #{shopCode},
+            shop_name = #{shopName},
+            category_code = #{categoryCode},
+            type_code = #{typeCode},
+            region_code = #{regionCode},
+            region_name = #{regionName},
+            province_code = #{provinceCode},
+            province_name = #{provinceName},
+            city_code = #{cityCode},
+            city_name = #{cityName},
+            manage_mode = #{manageMode},
+            shop_channel_type = #{shopChannelType},
+            payment_mode = #{paymentMode},
+            payment_cycle = #{paymentCycle},
+            profit_split_rate = #{profitSplitRate},
+            extend_json_field = #{extendJsonField},
+            remark = #{remark},
+            is_active = 1,
+            version = #{version},
+            creator = #{creator},
+            create_time = #{createTime},
+            updater = #{updater},
+            update_time = #{updateTime}
+            WHERE
+                yqs_org_code = #{yqsOrgCode}
+            AND
+                tenant_code = #{tenantCode}
+    </update>
 </mapper>

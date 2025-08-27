@@ -35,50 +35,26 @@ public class Inseart {
 
         ExcelListener excelListener = new ExcelListener();
 
+//        EasyExcel.read(file, ShopExcelDTO.class, excelListener)
+//                .registerConverter(new FixDateConverter())
+//                .registerConverter(new BigDecimalConverter())
+//                .sheet("直营门店")
+//                .doRead();
+
         EasyExcel.read(file, ShopExcelDTO.class, excelListener)
                 .registerConverter(new FixDateConverter())
                 .registerConverter(new BigDecimalConverter())
-                .sheet("门店资料")
+                .sheet()
                 .doRead();
 
         List<ShopExcelDTO> middleList = excelListener.getDataList();
-        log.info("导入成功，共导入 {} 条数据", middleList.size());
-
-        Map<String, List<ShopExcelDTO>> middleMap = middleList.stream()
-                .filter(dto -> dto.getShopCode() != null && !dto.getShopCode().isEmpty())
-                .collect(Collectors.groupingBy(ShopExcelDTO::getShopCode));
-        List<ShopExcelDTO> finalList = new ArrayList<>();
-        List<ShopExcelDTO> abandonList = new ArrayList<>();
-
-        for (Map.Entry<String,List<ShopExcelDTO>> entry: middleMap.entrySet()) {
-            String shopCode = entry.getKey();
-            List<ShopExcelDTO> noFilterList = entry.getValue();
-
-            Optional<ShopExcelDTO> abandon = noFilterList.stream()
-                    .filter(dto -> "未启用".equals(dto.getIsActive()))
-                    .findFirst();
-            if (abandon.isPresent()) {
-                finalList.add(abandon.get());
-
-                noFilterList.stream()
-                        .filter(dto -> !dto.equals(abandon.get()))
-                        .forEach(dto -> {
-                            abandonList.add(dto);
-                            log.warn("数据被丢弃（ 启用 ）");
-                        });
-            }else{
-                abandonList.addAll(noFilterList);
-            }
-        }
-
-//        int limit = 10;
-//        List<ShopExcelDTO> limitedList = dataList.size() > limit ? dataList.subList(5, limit) : dataList;
-
-//      List<Shop> shopList = new ArrayList<>();
-//       List<ShopExtend> shopExtendList = new ArrayList<>();
-
+        log.info("接收成功，共接收 {} 条数据", middleList.size());
+//          测试数据库中是否存在数据
+//        List<Shop> shopList = new ArrayList<>();
+//        List<ShopExtend> shopExtendList = new ArrayList<>();
+//
 //        int i = 0;
-//        for (ShopExcelDTO dto : dataList) {
+//        for (ShopExcelDTO dto : middleList) {
 //            shopList.add(shopImportMapper.toShop(dto));
 //            shopExtendList.add(shopImportMapper.toShopExtend(dto));
 //        }
@@ -98,37 +74,62 @@ public class Inseart {
 //                }
 //            }
 //            log.info("数据库中已存在 "+i +" 条数据");
-
-
-//
-//            log.info("正在插入 {} 条新数据", toInsertList.size());
-//            shopMapper.increaseShop(toInsertList);
-//            sqlSession.commit();
-//
-//            log.info("测试插入成功！共插入 {} 条新门店数据", toInsertList.size());
-//            return true;
-//
-//        } catch (Exception e) {
-//            log.error("插入过程中发生异常：", e);
-//            return false;
 //        }
-     //   }
 
+        Map<String, List<ShopExcelDTO>> middleMap = middleList.stream()
+                .filter(dto -> dto.getShopCode() != null && !dto.getShopCode().isEmpty())
+                .collect(Collectors.groupingBy(ShopExcelDTO::getShopCode));
+        List<ShopExcelDTO> finalList = new ArrayList<>();
+        List<ShopExcelDTO> abandonList = new ArrayList<>();
+
+        finalList.addAll(middleList);
+//        for (Map.Entry<String,List<ShopExcelDTO>> entry: middleMap.entrySet()) {
+//            String shopCode = entry.getKey();
+//            List<ShopExcelDTO> noFilterList = entry.getValue();
+//
+//            Optional<ShopExcelDTO> abandon = noFilterList.stream()
+//                    .filter(dto -> "未启用".equals(dto.getIsActive()))
+//                    .findFirst();
+//            if (abandon.isPresent()) {
+//                finalList.add(abandon.get());
+//
+//                noFilterList.stream()
+//                        .filter(dto -> !dto.equals(abandon.get()))
+//                        .forEach(dto -> {
+//                            abandonList.add(dto);
+//                            log.warn("数据被丢弃（ 启用 ）");
+//                        });
+//            }else{
+//                abandonList.addAll(noFilterList);
+//            }
+//        }
+//
+//
+//
         List<Shop> shopList = new ArrayList<>();
         List<ShopExtend> shopExtendList = new ArrayList<>();
-
 
         for(ShopExcelDTO dto : finalList){
             shopList.add(shopImportMapper.toShop(dto));
             shopExtendList.add(shopImportMapper.toShopExtend(dto));
         }
+        int j = 0;
         try(SqlSession sqlSession = MyBatisUtil.getSqlSession()) {
             IShopMapper shopMapper = sqlSession.getMapper(IShopMapper.class);
             IShopExtendMapper shopExtendMapper = sqlSession.getMapper(IShopExtendMapper.class);
-              shopMapper.increaseShop(shopList);
-  //          shopExtendMapper.increaseShopExtend(shopExtendList);
+//              shopMapper.increaseShop(shopList);
+            shopExtendMapper.increaseShopExtend(shopExtendList);
             sqlSession.commit();
+
             log.info("成功插入 ");
+            //            for (Shop shop : shopList) {
+//                shopMapper.updateShop(shop);
+//                sqlSession.commit();
+//                log.info("更新成功，店铺代码为 [{}] ,店铺名为 {}", shop.getShopCode(),shop.getShopName());
+//                j++;
+//
+//            }
+//            log.info("成功更新 "+j+" 条数据");
         }catch (Exception e){
             log.error(e.getMessage());
         }

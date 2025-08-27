@@ -15,7 +15,7 @@
     </Appenders>
 
     <Loggers>
-        <Logger name="com.baomidou.mybatisplus" level="info" additivity="false">
+        <Logger name="org.apache.ibatis.logging" level="warn" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
 

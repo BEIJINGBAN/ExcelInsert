@@ -401,16 +401,7 @@ public interface ShopImportMapper {
                 return "00";
         }
     }
-    @Named("mapVatRate")
-    default String mapVatRate(BigDecimal source) {
-        // 处理 null 情况
-        if (source == null) {
-            return "00";
-        }
-        int rate = source.multiply(BigDecimal.valueOf(100)).intValue();
 
-        return String.format("%02d", rate);
-    }
     @Named("mapMallType")
     default String mapMallType(String source) {
         if (source == null) {
@@ -526,13 +517,37 @@ public interface ShopImportMapper {
                 return "00";
         }
     }
+    @Named("mapVatRate")
+    default String mapVatRate(BigDecimal source) {
+        // 处理 null 情况
+        if (source == null) {
+            return "00";
+        }
+        int rate = source.multiply(BigDecimal.valueOf(100)).intValue();
+
+        return String.format("%02d", rate);
+    }
+    @Named("mapRegionCode")
+    default String mapRegionCode(String source) {
+        // 处理 null 情况
+        if (source == null) {
+            return "000";
+        }
+        switch (source) {
+            case "这是一个测试":
+                return "001";
+
+                default:
+                    return "000";
+        }
+    }
     @Mappings({
             @Mapping(target = "id", expression = "java(com.baomidou.mybatisplus.core.toolkit.IdWorker.getId())"),
             @Mapping(source = "shopCode", target = "shopCode"),
             @Mapping(source = "shopName", target = "shopName"),
             @Mapping(source = "categoryCode", target = "categoryCode",qualifiedByName = "mapCategoryCode"),
             @Mapping(source = "typeCode", target = "typeCode",qualifiedByName = "mapTypeCode"),
-            @Mapping(source = "regionCode", target = "regionCode"),
+            @Mapping(source = "regionCode", target = "regionCode",qualifiedByName = "mapRegionCode"),
             @Mapping(source = "regionName", target = "regionName"),
             @Mapping(source = "provinceCode", target = "provinceCode"),
             @Mapping(source = "provinceName", target = "provinceName"),
@@ -625,7 +640,7 @@ public interface ShopImportMapper {
             // 员工人数
             @Mapping(source = "staffNum", target = "staffNum"),
             // 增值税税率
-//            @Mapping(source = "vatRate", target = "vatRate",qualifiedByName = "mapVatRate"),
+            @Mapping(source = "vatRate", target = "vatRate",qualifiedByName = "mapVatRate"),
 
             // 费用信息
             @Mapping(source = "monthlyRentAmount", target = "monthlyRentAmount"),

@@ -342,7 +342,7 @@ public class ShopExcelDTO implements Serializable {
      * 增值税税率（%），只允许输入＞0的整数
      */
     @ExcelProperty("增值税税率")
-    private Integer vatRate;
+    private BigDecimal vatRate;
 
     /**
      * 月租金（元）
@@ -1225,11 +1225,11 @@ public class ShopExcelDTO implements Serializable {
 
 
 
-    public Integer getVatRate() {
+    public BigDecimal getVatRate() {
         return vatRate;
     }
 
-    public void setVatRate(Integer vatRate) {
+    public void setVatRate(BigDecimal vatRate) {
         this.vatRate = vatRate;
     }
 

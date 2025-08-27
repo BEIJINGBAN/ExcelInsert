@@ -52,5 +52,106 @@
             #{item.updater}, #{item.updateTime}
             )
         </foreach>
+
     </insert>
+    <select id="existsByShopCodeAndTenant" resultType="boolean">
+        SELECT EXISTS(
+            SELECT 1
+            FROM mao_ren_shop_info_extend
+            WHERE shop_code = #{shopCode}
+              AND tenant_code = #{tenantCode}
+        )
+    </select>
+
+    <!-- 更新单条记录：根据 shop_code 和 tenant_code -->
+    <update id="updateShopExtend" parameterType="Domain.ShopExtend">
+        UPDATE mao_ren_shop_info_extend
+        <set>
+            <!-- 只更新非 null 字段（可选） -->
+            <if test="brandType != null">brand_type = #{brandType},</if>
+            <if test="ledgerType != null">ledger_type = #{ledgerType},</if>
+            <if test="leaseType != null">lease_type = #{leaseType},</if>
+            <if test="channelSalesPositionType != null">channel_sales_position_type = #{channelSalesPositionType},</if>
+            <if test="mallType != null">mall_type = #{mallType},</if>
+            <if test="firstLevelRegionType != null">first_level_region_type = #{firstLevelRegionType},</if>
+            <if test="secondLevelRegionType != null">second_level_region_type = #{secondLevelRegionType},</if>
+            <if test="cityLevel != null">city_level = #{cityLevel},</if>
+            <if test="regionLeader != null">region_leader = #{regionLeader},</if>
+            <if test="operationLeader != null">operation_leader = #{operationLeader},</if>
+            <if test="operationLeaderEmployeeId != null">operation_leader_employee_id = #{operationLeaderEmployeeId},</if>
+            <if test="productLeader != null">product_leader = #{productLeader},</if>
+            <if test="certNum != null">cert_num = #{certNum},</if>
+            <if test="shopImageType != null">shop_image_type = #{shopImageType},</if>
+            <if test="shopGrade != null">shop_grade = #{shopGrade},</if>
+            <if test="openTime != null">open_time = #{openTime},</if>
+            <if test="closeTime != null">close_time = #{closeTime},</if>
+            <if test="shopExtensionType != null">shop_extension_type = #{shopExtensionType},</if>
+            <if test="floor != null">floor = #{floor},</if>
+            <if test="position != null">position = #{position},</if>
+            <if test="totalArea != null">total_area = #{totalArea},</if>
+            <if test="salesArea != null">sales_area = #{salesArea},</if>
+            <if test="warehouseArea != null">warehouse_area = #{warehouseArea},</if>
+            <if test="staffNum != null">staff_num = #{staffNum},</if>
+            <if test="vatRate != null">vat_rate = #{vatRate},</if>
+            <if test="monthlyRentAmount != null">monthly_rent_amount = #{monthlyRentAmount},</if>
+            <if test="monthlyPropertyAmount != null">monthly_property_amount = #{monthlyPropertyAmount},</if>
+            <if test="contractDeductionRate != null">contract_deduction_rate = #{contractDeductionRate},</if>
+            <if test="franchiseeProfitSplitRate != null">franchisee_profit_split_rate = #{franchiseeProfitSplitRate},</if>
+            <if test="o2oTechnicalServiceFeeRate != null">o2o_technical_service_fee_rate = #{o2oTechnicalServiceFeeRate},</if>
+            <if test="o2oOperationServiceFeeRate != null">o2o_operation_service_fee_rate = #{o2oOperationServiceFeeRate},</if>
+            <if test="waterElectricityAmount != null">water_electricity_amount = #{waterElectricityAmount},</if>
+            <if test="mallFixedCostAmount != null">mall_fixed_cost_amount = #{mallFixedCostAmount},</if>
+            <if test="otherFixedCostAmount != null">other_fixed_cost_amount = #{otherFixedCostAmount},</if>
+            <if test="mallFloatCostAmount != null">mall_float_cost_amount = #{mallFloatCostAmount},</if>
+            <if test="guaranteeSalesAmount != null">guarantee_sales_amount = #{guaranteeSalesAmount},</if>
+            <if test="guaranteePeriod != null">guarantee_period = #{guaranteePeriod},</if>
+            <if test="guaranteeFirstYearSalesAmount != null">guarantee_first_year_sales_amount = #{guaranteeFirstYearSalesAmount},</if>
+            <if test="transformType != null">transform_type = #{transformType},</if>
+            <if test="lastTransformTime != null">last_transform_time = #{lastTransformTime},</if>
+            <if test="transformStartTime != null">transform_start_time = #{transformStartTime},</if>
+            <if test="transformEndTime != null">transform_end_time = #{transformEndTime},</if>
+            <if test="transformPeriod != null">transform_period = #{transformPeriod},</if>
+            <if test="transformTotalArea != null">transform_total_area = #{transformTotalArea},</if>
+            <if test="transformSalesArea != null">transform_sales_area = #{transformSalesArea},</if>
+            <if test="transformWarehouseArea != null">transform_warehouse_area = #{transformWarehouseArea},</if>
+            <if test="newStoreBaseInstallmentAmount != null">new_store_base_installment_amount = #{newStoreBaseInstallmentAmount},</if>
+            <if test="newStorePropInstallmentAmount != null">new_store_prop_installment_amount = #{newStorePropInstallmentAmount},</if>
+            <if test="newStoreMarketExpansionAmount != null">new_store_market_expansion_amount = #{newStoreMarketExpansionAmount},</if>
+            <if test="newStoreCardFeeAmount != null">new_store_card_fee_amount = #{newStoreCardFeeAmount},</if>
+            <if test="newStoreLogisticsAmount != null">new_store_logistics_amount = #{newStoreLogisticsAmount},</if>
+            <if test="newStoreOtherAmount != null">new_store_other_amount = #{newStoreOtherAmount},</if>
+            <if test="franchiseeName != null">franchisee_name = #{franchiseeName},</if>
+            <if test="franchiseeAccountNo != null">franchisee_account_no = #{franchiseeAccountNo},</if>
+            <if test="fdMainContractId != null">fd_main_contract_id = #{fdMainContractId},</if>
+            <if test="franchiseeDeductionRate != null">franchisee_deduction_rate = #{franchiseeDeductionRate},</if>
+            <if test="contractStartTime != null">contract_start_time = #{contractStartTime},</if>
+            <if test="contractEndTime != null">contract_end_time = #{contractEndTime},</if>
+            <if test="contractPeriodMonth != null">contract_period_month = #{contractPeriodMonth},</if>
+            <if test="checkoutMethod != null">checkout_method = #{checkoutMethod},</if>
+            <if test="yonyouDepartmentCode != null">yonyou_department_code = #{yonyouDepartmentCode},</if>
+            <if test="yonyouDepartmentName != null">yonyou_department_name = #{yonyouDepartmentName},</if>
+            <if test="yonyouMallCode != null">yonyou_mall_code = #{yonyouMallCode},</if>
+            <if test="yonyouMallName != null">yonyou_mall_name = #{yonyouMallName},</if>
+            <if test="yonyouFranchiseeCode != null">yonyou_franchisee_code = #{yonyouFranchiseeCode},</if>
+            <if test="yonyouFranchiseeName != null">yonyou_franchisee_name = #{yonyouFranchiseeName},</if>
+            <if test="yonyouCompanyCode != null">yonyou_company_code = #{yonyouCompanyCode},</if>
+            <if test="yonyouCompanyName != null">yonyou_company_name = #{yonyouCompanyName},</if>
+            <if test="yonyouLiveBusinessShopTypeCode != null">yonyou_live_business_shop_type_code = #{yonyouLiveBusinessShopTypeCode},</if>
+            <if test="yonyouLiveBusinessShopTypeName != null">yonyou_live_business_shop_type_name = #{yonyouLiveBusinessShopTypeName},</if>
+            <if test="yonyouFinancialLeaderMobile != null">yonyou_financial_leader_mobile = #{yonyouFinancialLeaderMobile},</if>
+            <if test="yonyouHeadCompanyCode != null">yonyou_head_company_code = #{yonyouHeadCompanyCode},</if>
+            <if test="yonyouBranchCompanyCode != null">yonyou_branch_company_code = #{yonyouBranchCompanyCode},</if>
+            <if test="yonyouPreparer != null">yonyou_preparer = #{yonyouPreparer},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="isActive != null">is_active = #{isActive},</if>
+            <if test="version != null">version = #{version},</if>
+            <if test="creator != null">creator = #{creator},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updater != null">updater = #{updater},</if>
+            <if test="updateTime != null">update_time = #{updateTime}</if>
+        </set>
+        WHERE shop_code = #{shopCode}
+        AND tenant_code = #{tenantCode}
+    </update>
+
 </mapper>
